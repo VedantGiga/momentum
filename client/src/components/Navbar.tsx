@@ -5,6 +5,7 @@ import { ApplicationDialog } from "./ApplicationDialog";
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -22,37 +23,72 @@ export function Navbar() {
         className={`
           pointer-events-auto
           flex items-center justify-between
-          w-full px-6 py-4
-          border-b transition-all duration-700 ease-in-out
-          ${scrolled 
-            ? "max-w-2xl mt-6 rounded-full bg-[#0B0B0C]/70 backdrop-blur-xl border-white/10 shadow-2xl py-3" 
-            : "max-w-full bg-[#0B0B0C]/40 backdrop-blur-md border-white/5"}
+          transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)]
+          ${scrolled
+            ? "rounded-full bg-white/5 backdrop-blur-3xl backdrop-saturate-150 border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.36)] ring-1 ring-white/5 py-3 px-8 w-[90%] md:w-[800px] mt-4"
+            : "w-full border-b border-white/5 bg-transparent backdrop-blur-[2px] py-6 px-6 md:px-12 rounded-none mt-0"}
         `}
-        style={{
-          boxShadow: scrolled ? "0 8px 32px 0 rgba(0, 0, 0, 0.8)" : "none"
-        }}
       >
         <div className="flex items-center gap-2">
-          <a href="/" className="text-xl font-display font-bold tracking-tighter glow-text">
+          <a href="/" className={`font-display font-bold tracking-tighter glow-text transition-all duration-500 ${scrolled ? "text-xl md:text-2xl" : "text-3xl md:text-4xl"}`}>
             MOMENTUM
           </a>
-          <div className="hidden md:flex ml-8 gap-6 pointer-events-auto">
-            <a href="/founders" className="text-xs font-mono uppercase tracking-widest text-white/40 hover:text-white transition-colors">Founders</a>
-          </div>
         </div>
 
-        <div className="flex items-center gap-4">
+        {/* Desktop Navigation */}
+        <div className={`hidden md:flex items-center gap-8 ${scrolled ? "gap-6" : "gap-12"}`}>
+          <div className={`flex transition-all duration-500 ${scrolled ? "gap-6" : "gap-12"}`}>
+            <a href="/founders" className="text-sm font-mono uppercase tracking-widest text-white/40 hover:text-white transition-colors">Founders</a>
+            <a href="/manifesto" className="text-sm font-mono uppercase tracking-widest text-white/40 hover:text-white transition-colors">Manifesto</a>
+          </div>
+
+          <div className="w-[1px] h-4 bg-white/10" />
+
           <ApplicationDialog>
-            <Button 
-              variant="default" 
+            <Button
+              variant="default"
               size="sm"
-              className="rounded-full px-6 bg-primary hover:bg-primary/90 transition-all duration-300"
+              className={`rounded-full bg-white text-black hover:bg-white/90 transition-all duration-300 font-bold shadow-[0_0_10px_rgba(255,255,255,0.2)] hover:shadow-[0_0_20px_rgba(255,255,255,0.4)] hover:scale-105 ${scrolled ? "h-8 px-4 text-xs" : "h-10 px-6 text-sm"}`}
             >
-              Apply
+              APPLY
             </Button>
           </ApplicationDialog>
         </div>
+
+        {/* Mobile Menu Toggle */}
+        <div className="md:hidden ml-auto pointer-events-auto">
+          <Button variant="ghost" size="icon" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+            <span className="sr-only">Toggle menu</span>
+            <div className="space-y-1.5">
+              <span className={`block w-6 h-0.5 bg-white transition-transform ${mobileMenuOpen ? "rotate-45 translate-y-2" : ""}`} />
+              <span className={`block w-6 h-0.5 bg-white transition-opacity ${mobileMenuOpen ? "opacity-0" : ""}`} />
+              <span className={`block w-6 h-0.5 bg-white transition-transform ${mobileMenuOpen ? "-rotate-45 -translate-y-2" : ""}`} />
+            </div>
+          </Button>
+        </div>
       </motion.div>
+
+      {/* Mobile Menu Overlay */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="fixed inset-0 top-20 z-40 bg-black/95 backdrop-blur-3xl p-6 md:hidden pointer-events-auto flex flex-col gap-8 border-t border-white/10"
+          >
+            <div className="flex flex-col gap-6 text-2xl font-display font-medium text-white">
+              <a href="/founders" onClick={() => setMobileMenuOpen(false)}>Founders</a>
+              <a href="/manifesto" onClick={() => setMobileMenuOpen(false)}>Manifesto</a>
+            </div>
+            <div className="mt-auto">
+              <ApplicationDialog>
+                <Button size="lg" className="w-full rounded-full bg-white text-black hover:bg-white/90">Apply for Access</Button>
+              </ApplicationDialog>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 }

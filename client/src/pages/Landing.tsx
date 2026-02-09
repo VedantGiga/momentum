@@ -9,10 +9,10 @@ import { Navbar } from "@/components/Navbar";
 
 const fadeIn = {
   hidden: { opacity: 0, y: 30 },
-  visible: { 
-    opacity: 1, 
-    y: 0, 
-    transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } 
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] }
   }
 };
 
@@ -28,57 +28,70 @@ export default function Landing() {
       <Navbar />
 
       {/* Hero Section */}
-      <section className="pt-64 pb-32 px-6 relative overflow-hidden">
-        {/* Irregular Orange Gradient */}
-        <motion.div 
-          animate={{
-            scale: [1, 1.2, 1],
-            x: [0, 50, 0],
-            y: [0, -30, 0],
-            rotate: [0, 90, 0],
-          }}
-          transition={{
-            duration: 15,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-          className="absolute top-1/4 -right-1/4 w-[600px] h-[600px] bg-primary/10 rounded-full blur-[120px] pointer-events-none mix-blend-screen"
-        />
+      <section className="min-h-screen flex flex-col items-center justify-center px-6 relative overflow-hidden pt-20">
 
-        <div className="max-w-7xl mx-auto relative z-10">
-          <motion.div 
-            initial="hidden" 
-            whileInView="visible" 
+        {/* Background Effects */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_-20%,rgba(255,255,255,0.1),rgba(0,0,0,0))]" />
+
+        <div className="max-w-5xl mx-auto relative z-10 text-center">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
             viewport={{ once: true }}
-            variants={stagger} 
-            className="max-w-4xl"
+            variants={stagger}
           >
-            <motion.h1 variants={fadeIn} className="text-6xl md:text-9xl font-display font-medium tracking-tighter leading-[0.8] mb-12 text-left">
-              No motivation.<br />
-              <span className="text-white/40">Just momentum.</span>
-            </motion.h1>
-            <motion.p variants={fadeIn} className="text-xl md:text-3xl text-muted-foreground font-light max-w-2xl leading-tight mb-16 text-left">
-              A private community where ambitious builders stop planning and start shipping. 
-              Consistency emerges from visibility and expectation.
-            </motion.p>
-            
-            <motion.div variants={fadeIn} className="flex flex-col sm:flex-row gap-8 items-start text-left">
+            {/* Kicker */}
+            <motion.div variants={fadeIn} className="flex justify-center mb-8">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm">
+                <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse shadow-[0_0_10px_rgba(255,100,0,0.5)]" />
+                <span className="text-xs font-mono uppercase tracking-widest text-white/60">Accepting new builders</span>
+              </div>
+            </motion.div>
+
+            {/* Headline */}
+            <motion.div variants={fadeIn} className="mb-6 relative">
+              <h1 className="text-7xl md:text-9xl font-display font-medium tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-white/50 select-none">
+                MOMENTUM
+              </h1>
+            </motion.div>
+
+            {/* Subheadline & Desc */}
+            <motion.div variants={fadeIn} className="mb-12 space-y-4">
+              <h2 className="text-2xl md:text-3xl font-light tracking-wide text-white/90">
+                No motivation. Just momentum.
+              </h2>
+              <p className="text-lg md:text-xl text-white/50 font-light max-w-2xl mx-auto leading-relaxed">
+                The anti-incubation community for serious shippers. <br className="hidden md:block" />
+                We replace willpower with systems.
+              </p>
+            </motion.div>
+
+            {/* Primary CTA */}
+            <motion.div variants={fadeIn} className="flex flex-col items-center gap-6">
               <ApplicationDialog>
-                <Button size="lg" className="rounded-none h-16 px-12 bg-primary hover:bg-primary/90 text-white font-bold text-xl tracking-wide shadow-[0_0_30px_-10px_var(--primary)] hover:shadow-[0_0_40px_-5px_var(--primary)] transition-all duration-300">
-                  Start Building
+                <Button size="lg" className="rounded-full h-14 px-8 bg-white text-black hover:bg-white/90 font-medium text-base tracking-wide transition-all duration-300 shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] hover:scale-105">
+                  Apply for Access
                 </Button>
               </ApplicationDialog>
-              <div className="flex items-center gap-6 text-sm text-muted-foreground font-mono">
-                <span className="flex items-center gap-2">
-                  <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                  12 Active Batches
-                </span>
-                <span className="w-px h-6 bg-white/10" />
-                <span>94% Completion Rate</span>
+
+              <div className="flex items-center gap-4 text-xs font-mono text-white/30 uppercase tracking-widest">
+                <span>Limited Spots</span>
+                <span>•</span>
+                <span>Review Required</span>
               </div>
             </motion.div>
           </motion.div>
         </div>
+
+        {/* Scroll Indicator */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1, duration: 1 }}
+          className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none"
+        >
+          <div className="w-[1px] h-12 bg-gradient-to-b from-white/0 via-white/20 to-white/0" />
+        </motion.div>
       </section>
 
       {/* The Problem */}
@@ -105,7 +118,7 @@ export default function Landing() {
               ))}
             </div>
           </motion.div>
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
@@ -133,7 +146,7 @@ export default function Landing() {
 
       {/* The Belief */}
       <section className="py-40 px-6 relative">
-        <motion.div 
+        <motion.div
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
@@ -150,7 +163,7 @@ export default function Landing() {
       {/* How It Works */}
       <section className="py-32 px-6 bg-white/[0.02] border-y border-white/5">
         <div className="max-w-7xl mx-auto">
-          <motion.div 
+          <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
@@ -163,8 +176,8 @@ export default function Landing() {
               { icon: Rocket, title: "Ship", desc: "By Sunday midnight, your project must be live. No excuses." },
               { icon: Repeat, title: "Reflect", desc: "Review what worked, what didn't, and reset for the next sprint." },
             ].map((step, i) => (
-              <motion.div 
-                key={i} 
+              <motion.div
+                key={i}
                 variants={fadeIn}
                 className="bg-[#0B0B0C] p-8 md:p-12 hover:bg-white/[0.03] transition-all duration-500 group h-full flex flex-col justify-between"
               >
@@ -185,7 +198,7 @@ export default function Landing() {
       {/* Activity Feed */}
       <section className="py-40 px-6">
         <div className="max-w-7xl mx-auto">
-          <motion.div 
+          <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
@@ -206,7 +219,7 @@ export default function Landing() {
               ))}
             </div>
           ) : (
-            <motion.div 
+            <motion.div
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
@@ -223,9 +236,8 @@ export default function Landing() {
                         </div>
                         <div className="text-sm font-medium text-white/60 group-hover:text-white transition-colors">{project.author}</div>
                       </div>
-                      <span className={`text-[10px] font-mono uppercase px-3 py-1 rounded-full border ${
-                        project.status === 'Shipped' ? 'border-green-500/20 text-green-400 bg-green-500/5' : 'border-primary/20 text-primary bg-primary/5'
-                      }`}>
+                      <span className={`text-[10px] font-mono uppercase px-3 py-1 rounded-full border ${project.status === 'Shipped' ? 'border-green-500/20 text-green-400 bg-green-500/5' : 'border-primary/20 text-primary bg-primary/5'
+                        }`}>
                         {project.status}
                       </span>
                     </div>
@@ -249,58 +261,79 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Final CTA */}
-      <section className="py-60 px-6 relative text-center overflow-hidden border-t border-white/5">
-        {/* Irregular Orange Gradient */}
-        <motion.div 
-          animate={{
-            scale: [1, 1.3, 1],
-            x: [-50, 50, -50],
-            y: [0, 50, 0],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: "linear"
-          }}
-          className="absolute -bottom-1/4 -left-1/4 w-[800px] h-[800px] bg-primary/5 rounded-full blur-[150px] pointer-events-none mix-blend-screen"
-        />
+      {/* Final CTA - Stop Stalling */}
+      <section className="py-40 px-6 relative overflow-hidden border-t border-white/5 bg-[#0B0B0C]">
 
-        <motion.div 
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={fadeIn}
-          className="max-w-3xl mx-auto relative z-10"
-        >
-          <h2 className="text-6xl md:text-8xl font-display font-bold tracking-tighter mb-10">
-            Stop stalling.
-          </h2>
-          <p className="text-2xl text-muted-foreground mb-16 font-light">
-            We only accept 10 new builders per month. 
-            Selection is manual. Inactivity is a ban.
-          </p>
-          <ApplicationDialog>
-            <Button size="lg" className="rounded-none h-20 px-16 bg-white text-black hover:bg-white/90 font-bold text-2xl tracking-tight transition-all duration-500 hover:scale-105 active:scale-95 shadow-2xl">
-              Apply for Access
-            </Button>
-          </ApplicationDialog>
-        </motion.div>
+        <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-20 items-center relative z-10">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={stagger}
+            className="text-left"
+          >
+            <motion.h2 variants={fadeIn} className="text-6xl md:text-8xl font-display font-bold tracking-tighter mb-8 leading-[0.9]">
+              STOP<br />STALLING.
+            </motion.h2>
+            <motion.p variants={fadeIn} className="text-xl text-muted-foreground mb-12 font-light max-w-md leading-relaxed">
+              We only accept 10 new builders per month.
+              Selection is manual. Inactivity is a ban.
+            </motion.p>
+            <motion.div variants={fadeIn}>
+              <ApplicationDialog>
+                <Button size="lg" className="rounded-full h-12 px-8 bg-white text-black hover:bg-white/90 font-bold text-base tracking-wide transition-all duration-300 shadow-[0_0_15px_rgba(255,255,255,0.1)] hover:shadow-[0_0_25px_rgba(255,255,255,0.3)] hover:scale-105">
+                  Apply for Access
+                </Button>
+              </ApplicationDialog>
+            </motion.div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1 }}
+            className="hidden md:flex justify-end relative"
+          >
+            <div className="relative w-full aspect-square max-w-lg border border-white/10 p-8 grid grid-cols-2 gap-4">
+              <div className="bg-white/5 w-full h-full" />
+              <div className="bg-white/5 w-full h-full" />
+              <div className="bg-white/5 w-full h-full" />
+              <div className="bg-primary/20 w-full h-full animate-pulse" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0C] via-transparent to-transparent" />
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Decorative Grid - Premium/Technical Feel */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none opacity-20" />
       </section>
 
       {/* Footer */}
-      <footer className="py-20 px-6 border-t border-white/5 bg-black/40 backdrop-blur-xl">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-12">
-          <div className="text-2xl font-display font-bold tracking-tighter">
-            MOMENTUM
+      <footer className="w-full py-12 md:py-20 border-t border-white/5 bg-black relative overflow-hidden">
+        <div className="absolute inset-0 bg-primary/5 blur-[100px] pointer-events-none" />
+        <div className="max-w-7xl mx-auto px-6 relative z-10">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-12 mb-20">
+            <div className="flex gap-8 font-mono text-sm tracking-widest text-white/40 uppercase">
+              <a href="#" className="hover:text-primary transition-colors">Twitter</a>
+              <a href="#" className="hover:text-primary transition-colors">Manifesto</a>
+              <a href="#" className="hover:text-primary transition-colors">Support</a>
+            </div>
+            <div className="text-xs text-white/20 font-mono uppercase tracking-[0.3em]">
+              &copy; {new Date().getFullYear()} Keep Building.
+            </div>
           </div>
-          <div className="flex gap-12 font-mono text-sm tracking-widest text-white/20 uppercase">
-            <a href="#" className="hover:text-primary transition-colors">Twitter</a>
-            <a href="#" className="hover:text-primary transition-colors">Manifesto</a>
-            <a href="#" className="hover:text-primary transition-colors">Support</a>
-          </div>
-          <div className="text-xs text-white/10 font-mono uppercase tracking-[0.3em]">
-            &copy; {new Date().getFullYear()} Keep Building.
+
+          <div className="w-full overflow-hidden">
+            <motion.h1
+              initial={{ y: 100, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+              viewport={{ once: true }}
+              className="text-[12vw] md:text-[14vw] leading-[0.8] font-display font-bold tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white/10 to-transparent select-none text-center"
+            >
+              MOMENTUM
+            </motion.h1>
           </div>
         </div>
       </footer>

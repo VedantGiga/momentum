@@ -10,7 +10,7 @@
   --font-mono: 'JetBrains Mono', monospace;
 
   /* Deep Charcoal Base */
-  --background: 240 6% 5%; 
+  --background: 240 6% 5%;
   --foreground: 0 0% 95%;
 
   /* Electric Amber Accent */
@@ -35,7 +35,8 @@
   --border: 240 6% 14%;
   --input: 240 6% 14%;
   --ring: 25 100% 50%;
-  --radius: 0rem; /* Sharp corners for brutalist/premium feel */
+  --radius: 0rem;
+  /* Sharp corners for brutalist/premium feel */
 }
 
 @layer base {
@@ -43,16 +44,22 @@
     @apply border-border;
     border-radius: 0 !important;
   }
+
   body {
     @apply bg-background text-foreground antialiased font-sans selection:bg-primary/20 selection:text-primary;
-    background-image: 
+    background-image:
       radial-gradient(circle at 50% -20%, hsl(var(--primary) / 0.15) 0%, transparent 50%),
       radial-gradient(circle at 100% 50%, hsl(var(--primary) / 0.05) 0%, transparent 40%),
       radial-gradient(circle at 0% 80%, hsl(var(--primary) / 0.03) 0%, transparent 30%);
     background-attachment: fixed;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     @apply font-display tracking-tight;
   }
 }
@@ -61,7 +68,7 @@
   .text-gradient {
     @apply bg-clip-text text-transparent bg-gradient-to-r from-white via-white/90 to-white/70;
   }
-  
+
   .glass-panel {
     @apply bg-card/50 backdrop-blur-md border border-white/5 shadow-2xl;
   }
@@ -75,12 +82,15 @@
 ::-webkit-scrollbar {
   width: 8px;
 }
+
 ::-webkit-scrollbar-track {
   @apply bg-background;
 }
+
 ::-webkit-scrollbar-thumb {
   @apply bg-muted rounded-full;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   @apply bg-muted-foreground;
 }
