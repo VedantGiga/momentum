@@ -25,6 +25,7 @@ export function ApplicationDialog({ children }: ApplicationDialogProps) {
     defaultValues: {
       name: "",
       email: "",
+      phoneNumber: "",
       portfolioUrl: "",
       reason: "",
     },
@@ -53,29 +54,32 @@ export function ApplicationDialog({ children }: ApplicationDialogProps) {
       <DialogTrigger asChild>
         {children}
       </DialogTrigger>
-      <DialogContent className="bg-[#0B0B0C] border-white/10 text-white sm:max-w-[500px] p-8 gap-8 shadow-2xl shadow-primary/5">
-        <DialogHeader className="space-y-4">
-          <DialogTitle className="text-3xl font-display font-light tracking-tight">
-            Join the <span className="text-primary">Momentum</span>
+      <DialogContent className="bg-[#0B0B0C] border-white/10 text-white sm:max-w-[450px] p-6 gap-4 shadow-2xl shadow-primary/5 max-h-[90vh] overflow-y-auto">
+        <DialogHeader className="space-y-2">
+          <DialogTitle className="text-2xl font-display font-light tracking-tight">
+            Join the <span className="text-primary">Stackhouse</span>
           </DialogTitle>
-          <DialogDescription className="text-muted-foreground text-base">
-            We review every application manually. Tell us what you're building and why you need accountability.
+          <DialogDescription className="text-muted-foreground text-sm">
+            Join a curated network of founders and engineers.
           </DialogDescription>
         </DialogHeader>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
               control={form.control}
               name="name"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-xs uppercase tracking-widest text-muted-foreground font-mono">Full Name</FormLabel>
+                <FormItem className="space-y-1">
+                  <FormLabel className="text-[10px] uppercase tracking-widest text-muted-foreground font-mono">
+                    Full Name <span className="text-primary">*</span>
+                  </FormLabel>
                   <FormControl>
-                    <Input 
-                      {...field} 
-                      className="bg-white/5 border-white/10 focus:border-primary/50 text-white h-12 rounded-none transition-all duration-300"
-                      placeholder="Jane Builder" 
+                    <Input
+                      {...field}
+                      required
+                      className="bg-white/5 border-white/10 focus:border-primary/50 text-white h-9 rounded-none text-sm transition-all duration-300"
+                      placeholder="Jane Doe"
                     />
                   </FormControl>
                   <FormMessage />
@@ -87,14 +91,17 @@ export function ApplicationDialog({ children }: ApplicationDialogProps) {
               control={form.control}
               name="email"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-xs uppercase tracking-widest text-muted-foreground font-mono">Email Address</FormLabel>
+                <FormItem className="space-y-1">
+                  <FormLabel className="text-[10px] uppercase tracking-widest text-muted-foreground font-mono">
+                    Email Address <span className="text-primary">*</span>
+                  </FormLabel>
                   <FormControl>
-                    <Input 
-                      {...field} 
+                    <Input
+                      {...field}
                       type="email"
-                      className="bg-white/5 border-white/10 focus:border-primary/50 text-white h-12 rounded-none transition-all duration-300"
-                      placeholder="jane@example.com" 
+                      required
+                      className="bg-white/5 border-white/10 focus:border-primary/50 text-white h-9 rounded-none text-sm transition-all duration-300"
+                      placeholder="jane@example.com"
                     />
                   </FormControl>
                   <FormMessage />
@@ -104,15 +111,43 @@ export function ApplicationDialog({ children }: ApplicationDialogProps) {
 
             <FormField
               control={form.control}
+              name="phoneNumber"
+              render={({ field }) => (
+                <FormItem className="space-y-1">
+                  <FormLabel className="text-[10px] uppercase tracking-widest text-muted-foreground font-mono">
+                    WhatsApp Number <span className="text-primary">*</span>
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      type="tel"
+                      required
+                      className="bg-white/5 border-white/10 focus:border-primary/50 text-white h-9 rounded-none text-sm transition-all duration-300"
+                      placeholder="+1 (555) 000-0000"
+                    />
+                  </FormControl>
+                  <p className="text-[9px] text-muted-foreground/60 font-mono">
+                    Include country code (e.g. +1)
+                  </p>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
               name="portfolioUrl"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-xs uppercase tracking-widest text-muted-foreground font-mono">Proof of Work (URL)</FormLabel>
+                <FormItem className="space-y-1">
+                  <FormLabel className="text-[10px] uppercase tracking-widest text-muted-foreground font-mono">
+                    LinkedIn / Portfolio URL <span className="text-primary">*</span>
+                  </FormLabel>
                   <FormControl>
-                    <Input 
-                      {...field} 
-                      className="bg-white/5 border-white/10 focus:border-primary/50 text-white h-12 rounded-none transition-all duration-300"
-                      placeholder="github.com/jane or portfolio.com" 
+                    <Input
+                      {...field}
+                      required
+                      className="bg-white/5 border-white/10 focus:border-primary/50 text-white h-9 rounded-none text-sm transition-all duration-300"
+                      placeholder="linkedin.com/in/jane"
                     />
                   </FormControl>
                   <FormMessage />
@@ -124,13 +159,16 @@ export function ApplicationDialog({ children }: ApplicationDialogProps) {
               control={form.control}
               name="reason"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-xs uppercase tracking-widest text-muted-foreground font-mono">Why do you want to join?</FormLabel>
+                <FormItem className="space-y-1">
+                  <FormLabel className="text-[10px] uppercase tracking-widest text-muted-foreground font-mono">
+                    Why do you want to join? <span className="text-primary">*</span>
+                  </FormLabel>
                   <FormControl>
-                    <Textarea 
-                      {...field} 
-                      className="bg-white/5 border-white/10 focus:border-primary/50 text-white min-h-[100px] rounded-none transition-all duration-300 resize-none"
-                      placeholder="I have a project I've been putting off for months..." 
+                    <Textarea
+                      {...field}
+                      required
+                      className="bg-white/5 border-white/10 focus:border-primary/50 text-white min-h-[60px] rounded-none text-sm transition-all duration-300 resize-none"
+                      placeholder="I'm building a B2B SaaS..."
                     />
                   </FormControl>
                   <FormMessage />
@@ -138,17 +176,17 @@ export function ApplicationDialog({ children }: ApplicationDialogProps) {
               )}
             />
 
-            <Button 
-              type="submit" 
+            <Button
+              type="submit"
               disabled={mutation.isPending}
-              className="w-full bg-primary hover:bg-primary/90 text-white rounded-none h-14 font-display font-bold tracking-wide text-lg mt-4 transition-all duration-300 group"
+              className="w-full bg-primary hover:bg-primary/90 text-white rounded-none h-10 font-display font-medium tracking-wide text-sm mt-2 transition-all duration-300 group"
             >
               {mutation.isPending ? (
-                <Loader2 className="w-5 h-5 animate-spin" />
+                <Loader2 className="w-4 h-4 animate-spin" />
               ) : (
                 <>
                   Submit Application
-                  <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </>
               )}
             </Button>

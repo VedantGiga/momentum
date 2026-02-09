@@ -2,21 +2,24 @@ import { motion } from "framer-motion";
 import { Navbar } from "@/components/Navbar";
 import { Card } from "@/components/ui/card";
 import { Terminal, Github, Twitter, Linkedin } from "lucide-react";
+import { Footer } from "@/components/Footer";
 
 const founders = [
   {
-    name: "Alex Rivet",
-    role: "Core Contributor",
-    bio: "Ex-systems engineer turned builder. Focused on high-performance execution environments.",
-    github: "alexbuilds",
-    twitter: "alex_builds"
+    name: "Rajat Jhade",
+    role: "Founder",
+    bio: "Building the future of community for builders. Obsessed with shipping and creating environments where ambition thrives.",
+    image: "/rajat.jpg",
+    twitter: "rajat_builds",
+    github: "rajat-oss"
   },
   {
-    name: "Sarah Chen",
-    role: "Operations Lead",
-    bio: "Product strategist. Believes that discipline is a byproduct of great environments.",
-    github: "schen-dev",
-    twitter: "sarah_k"
+    name: "Vedant Vyas",
+    role: "Co-Founder",
+    bio: "Passionate about empowering developers. Focused on creating scalable systems and fostering innovation.",
+    image: "/vedant.jpg",
+    twitter: "vedant_vyas",
+    github: "VedantGiga"
   }
 ];
 
@@ -24,7 +27,7 @@ export default function Founders() {
   return (
     <div className="min-h-screen bg-[#0B0B0C] text-white selection:bg-primary/30">
       <Navbar />
-      
+
       <main className="pt-40 pb-32 px-6">
         <div className="max-w-7xl mx-auto">
           <motion.div
@@ -33,14 +36,14 @@ export default function Founders() {
             transition={{ duration: 0.8 }}
           >
             <h1 className="text-6xl md:text-8xl font-display font-medium tracking-tight mb-12">
-              The <span className="text-white/40">Founders</span>
+              The Founders
             </h1>
             <p className="text-xl md:text-2xl text-muted-foreground font-light max-w-2xl leading-relaxed mb-20">
-              We didn't build Momentum to network. We built it because we needed a place where shipping was the only metric that mattered.
+              We didn't build Stackhouse to network. We built it because we needed a place where shipping was the only metric that mattered.
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 gap-12">
+          <div className="grid md:grid-cols-2 gap-8">
             {founders.map((founder, i) => (
               <motion.div
                 key={i}
@@ -48,22 +51,32 @@ export default function Founders() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: i * 0.2 }}
               >
-                <Card className="bg-[#0F0F11]/50 backdrop-blur-sm border-white/5 p-12 rounded-none hover:border-primary/40 transition-all duration-500 group">
-                  <div className="flex items-center gap-2 mb-6">
-                    <Terminal className="w-5 h-5 text-primary" />
-                    <span className="text-xs font-mono uppercase tracking-widest text-primary/60">{founder.role}</span>
+                <Card className="bg-[#0F0F11]/50 backdrop-blur-sm border-white/5 p-0 overflow-hidden rounded-3xl hover:border-primary/40 transition-all duration-500 group flex flex-col md:flex-row max-w-2xl mx-auto">
+                  <div className="md:w-2/5 h-64 md:h-auto relative overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10 md:hidden" />
+                    <img
+                      src={founder.image}
+                      alt={founder.name}
+                      className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-100 group-hover:scale-110"
+                    />
                   </div>
-                  <h3 className="text-4xl font-display font-bold mb-4">{founder.name}</h3>
-                  <p className="text-lg text-muted-foreground font-light leading-relaxed mb-8">
-                    {founder.bio}
-                  </p>
-                  <div className="flex gap-6">
-                    <a href={`https://github.com/${founder.github}`} target="_blank" rel="noopener noreferrer" className="text-white/20 hover:text-white transition-colors">
-                      <Github className="w-6 h-6" />
-                    </a>
-                    <a href={`https://twitter.com/${founder.twitter}`} target="_blank" rel="noopener noreferrer" className="text-white/20 hover:text-white transition-colors">
-                      <Twitter className="w-6 h-6" />
-                    </a>
+                  <div className="p-8 md:p-10 flex flex-col justify-center md:w-3/5">
+                    <div className="flex items-center gap-2 mb-4">
+                      <Terminal className="w-4 h-4 text-primary" />
+                      <span className="text-xs font-mono uppercase tracking-widest text-primary/60">{founder.role}</span>
+                    </div>
+                    <h3 className="text-3xl font-display font-bold mb-3">{founder.name}</h3>
+                    <p className="text-base text-muted-foreground font-light leading-relaxed mb-6">
+                      {founder.bio}
+                    </p>
+                    <div className="flex gap-5">
+                      <a href={`https://github.com/${founder.github}`} target="_blank" rel="noopener noreferrer" className="text-white/20 hover:text-white transition-colors">
+                        <Github className="w-5 h-5" />
+                      </a>
+                      <a href={`https://twitter.com/${founder.twitter}`} target="_blank" rel="noopener noreferrer" className="text-white/20 hover:text-white transition-colors">
+                        <Twitter className="w-5 h-5" />
+                      </a>
+                    </div>
                   </div>
                 </Card>
               </motion.div>
@@ -72,16 +85,7 @@ export default function Founders() {
         </div>
       </main>
 
-      <footer className="py-20 px-6 border-t border-white/5 bg-black/40 backdrop-blur-xl">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-12">
-          <div className="text-2xl font-display font-bold tracking-tighter">
-            MOMENTUM
-          </div>
-          <div className="text-xs text-white/10 font-mono uppercase tracking-[0.3em]">
-            &copy; {new Date().getFullYear()} Keep Building.
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

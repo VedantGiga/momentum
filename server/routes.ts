@@ -3,6 +3,7 @@ import type { Server } from "http";
 import { storage } from "./storage";
 import { api } from "@shared/routes";
 import { z } from "zod";
+import { sendInviteEmail } from "./mailer";
 
 export async function registerRoutes(
   httpServer: Server,
@@ -24,12 +25,33 @@ export async function registerRoutes(
       if (err instanceof z.ZodError) {
         res.status(400).json({
           message: err.errors[0].message,
-          field: err.errors[0].path.join('.'),
+          field: err.errors[0].path.join("."),
         });
       } else {
-        res.status(500).json({ message: "Internal server error" });
+        const message = (err as Error).message;
+        if (message.includes("already exists")) {
+          res.status(409).json({ message });
+        } else {
+          console.error("Application create error:", err);
+          res.status(500).json({ message: "Internal server error" });
+        }
       }
     }
+  });
+
+  app.get("/api/applications", async (req, res) => {
+    const applications = await storage.getApplications();
+    res.json(applications);
+  });
+
+  app.patch("/api/applications/:id/approve", async (req, res) => {
+    const id = parseInt(req.params.id);
+    const application = await storage.approveApplication(id);
+
+    // Send invite email
+    const emailSent = await sendInviteEmail(application.email, application.name);
+
+    res.json({ ...application, emailSent });
   });
 
   // Seed initial data if empty

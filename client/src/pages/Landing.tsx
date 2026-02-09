@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { ArrowUpRight, Check, Rocket, Repeat, Terminal, Users, Clock, ShieldAlert } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { Navbar } from "@/components/Navbar";
+import { Footer } from "@/components/Footer";
 
 const fadeIn = {
   hidden: { opacity: 0, y: 30 },
@@ -44,40 +45,44 @@ export default function Landing() {
             <motion.div variants={fadeIn} className="flex justify-center mb-8">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm">
                 <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse shadow-[0_0_10px_rgba(255,100,0,0.5)]" />
-                <span className="text-xs font-mono uppercase tracking-widest text-white/60">Accepting new builders</span>
+                <span className="text-xs font-mono uppercase tracking-widest text-white/60">Community for Developers and Founders</span>
               </div>
             </motion.div>
 
             {/* Headline */}
             <motion.div variants={fadeIn} className="mb-6 relative">
-              <h1 className="text-7xl md:text-9xl font-display font-medium tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-white/50 select-none">
-                MOMENTUM
+              <h1 className="text-6xl md:text-9xl font-display font-medium tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-white/50 select-none">
+                STACKHOUSE
               </h1>
             </motion.div>
 
             {/* Subheadline & Desc */}
             <motion.div variants={fadeIn} className="mb-12 space-y-4">
               <h2 className="text-2xl md:text-3xl font-light tracking-wide text-white/90">
-                No motivation. Just momentum.
+                Connect with serious founders & developers.
               </h2>
               <p className="text-lg md:text-xl text-white/50 font-light max-w-2xl mx-auto leading-relaxed">
-                The anti-incubation community for serious shippers. <br className="hidden md:block" />
-                We replace willpower with systems.
+                The premier network for those who take their work seriously. <br className="hidden md:block" />
+                Networking, feedback, and career acceleration. 100% Free.
               </p>
             </motion.div>
 
             {/* Primary CTA */}
             <motion.div variants={fadeIn} className="flex flex-col items-center gap-6">
               <ApplicationDialog>
-                <Button size="lg" className="rounded-full h-14 px-8 bg-white text-black hover:bg-white/90 font-medium text-base tracking-wide transition-all duration-300 shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] hover:scale-105">
+                <Button size="lg" className="rounded-full h-12 px-8 bg-primary text-white hover:bg-primary/90 font-bold text-base tracking-wide transition-all duration-300 shadow-[0_0_20px_rgba(255,100,0,0.4)] hover:shadow-[0_0_35px_rgba(255,100,0,0.6)] hover:scale-105 flex items-center gap-2">
                   Apply for Access
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="translate-y-[0.5px]">
+                    <path d="M5 12h14" />
+                    <path d="M12 5l7 7-7 7" />
+                  </svg>
                 </Button>
               </ApplicationDialog>
 
               <div className="flex items-center gap-4 text-xs font-mono text-white/30 uppercase tracking-widest">
-                <span>Limited Spots</span>
+                <span>Free to Join</span>
                 <span>•</span>
-                <span>Review Required</span>
+                <span>Vetted Community</span>
               </div>
             </motion.div>
           </motion.div>
@@ -103,13 +108,13 @@ export default function Landing() {
             viewport={{ once: true, margin: "-100px" }}
             variants={stagger}
           >
-            <motion.h2 variants={fadeIn} className="text-4xl md:text-5xl font-display font-semibold mb-8">The cycle of unfinished work.</motion.h2>
+            <motion.h2 variants={fadeIn} className="text-4xl md:text-5xl font-display font-semibold mb-8">Building alone is the problem.</motion.h2>
             <div className="space-y-6">
               {[
-                "You have a folder of 'half-baked' side projects.",
-                "You rely on bursts of motivation that inevitably fade.",
-                "You build in isolation, making it easy to quit.",
-                "You over-engineer before you even validate."
+                "You lack a high-quality network of serious peers.",
+                "You struggle to find honest, constructive feedback.",
+                "Isolation leads to stagnation and burnout.",
+                "You need connections to open doors, not just code."
               ].map((item, i) => (
                 <motion.div key={i} variants={fadeIn} className="flex items-start gap-4">
                   <div className="mt-1.5 w-1.5 h-1.5 bg-primary/60 rotate-45" />
@@ -155,7 +160,7 @@ export default function Landing() {
         >
           <p className="font-mono text-primary text-sm tracking-[0.2em] uppercase mb-8">Our Core Philosophy</p>
           <h2 className="text-4xl md:text-6xl font-display leading-tight font-medium">
-            "Consistency emerges from visibility and expectation."
+            "Your network is your net worth. Surround yourself with the best."
           </h2>
         </motion.div>
       </section>
@@ -171,10 +176,10 @@ export default function Landing() {
             className="grid grid-cols-1 md:grid-cols-4 gap-px bg-white/5 border border-white/5 rounded-3xl overflow-hidden"
           >
             {[
-              { icon: Terminal, title: "Commit", desc: "Define exactly what you will ship in 1 week. No vague goals." },
-              { icon: Clock, title: "Show", desc: "Daily standups. 24 hours to post progress or you're out." },
-              { icon: Rocket, title: "Ship", desc: "By Sunday midnight, your project must be live. No excuses." },
-              { icon: Repeat, title: "Reflect", desc: "Review what worked, what didn't, and reset for the next sprint." },
+              { icon: Users, title: "Connect", desc: "Meet developers and founders who are as serious as you are." },
+              { icon: Terminal, title: "Collaborate", desc: "Share your work, get code reviews, and find co-founders." },
+              { icon: Rocket, title: "Grow", desc: "Leverage the network to launch better products and find opportunities." },
+              { icon: ShieldAlert, title: "Succeed", desc: "Fast-track your career with the right connections and mentorship." },
             ].map((step, i) => (
               <motion.div
                 key={i}
@@ -195,7 +200,7 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Activity Feed */}
+      {/* Success Stories */}
       <section className="py-40 px-6">
         <div className="max-w-7xl mx-auto">
           <motion.div
@@ -206,58 +211,61 @@ export default function Landing() {
             className="flex items-end justify-between mb-20"
           >
             <div>
-              <h2 className="text-5xl font-display font-bold mb-4">Weekly Ships</h2>
-              <p className="text-xl text-muted-foreground font-light">The standard we hold ourselves to.</p>
+              <h2 className="text-5xl font-display font-bold mb-4">Real Connections.</h2>
+              <p className="text-xl text-muted-foreground font-light">Don't just take our word for it.</p>
             </div>
-            <div className="hidden md:block font-mono text-xs text-primary/80 animate-pulse tracking-widest">REALTIME_EXEC_STREAM ●</div>
           </motion.div>
 
-          {isLoading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {[1, 2, 3].map((i) => (
-                <div key={i} className="h-80 bg-white/5 animate-pulse rounded-2xl border border-white/5" />
-              ))}
-            </div>
-          ) : (
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={stagger}
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-            >
-              {projects?.map((project) => (
-                <motion.div key={project.id} variants={fadeIn}>
-                  <Card className="bg-[#0F0F11]/50 backdrop-blur-sm border-white/5 p-8 hover:border-primary/40 hover:bg-[#0F0F11]/80 transition-all duration-500 group rounded-3xl h-full flex flex-col">
-                    <div className="flex justify-between items-start mb-6">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center font-bold text-sm border border-white/10 group-hover:border-primary/30 transition-colors">
-                          {project.author[0]}
-                        </div>
-                        <div className="text-sm font-medium text-white/60 group-hover:text-white transition-colors">{project.author}</div>
-                      </div>
-                      <span className={`text-[10px] font-mono uppercase px-3 py-1 rounded-full border ${project.status === 'Shipped' ? 'border-green-500/20 text-green-400 bg-green-500/5' : 'border-primary/20 text-primary bg-primary/5'
-                        }`}>
-                        {project.status}
-                      </span>
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={stagger}
+            className="grid grid-cols-1 md:grid-cols-3 gap-8"
+          >
+            {[
+              {
+                quote: "I found my technical co-founder within 48 hours of joining. We're now raising our seed round.",
+                author: "Sarah J.",
+                role: "Founder, ex-Stripe",
+                metric: "Seed Funded"
+              },
+              {
+                quote: "The feedback loop here is insane. I went from idea to first revenue in 14 days thanks to the community.",
+                author: "James L.",
+                role: "Indie Hacker",
+                metric: "$5k MRR"
+              },
+              {
+                quote: "Landed a senior engineering role through a referral in the #opportunities channel. Best network hands down.",
+                author: "David K.",
+                role: "Senior Engineer",
+                metric: "Hired"
+              }
+            ].map((story, i) => (
+              <motion.div key={i} variants={fadeIn}>
+                <Card className="bg-[#0F0F11]/50 backdrop-blur-sm border-white/5 p-10 hover:border-primary/40 hover:bg-[#0F0F11]/80 transition-all duration-500 group rounded-3xl h-full flex flex-col">
+                  <div className="mb-8">
+                    <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center text-primary mb-6">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" className="opacity-50">
+                        <path d="M14.017 21L14.017 18C14.017 16.8954 14.9124 16 16.017 16H19.017C19.5693 16 20.017 15.5523 20.017 15V9C20.017 8.44772 19.5693 8 19.017 8H15.017C14.4647 8 14.017 8.44772 14.017 9V11C14.017 11.5523 13.5693 12 13.017 12H12.017V5H22.017V15C22.017 18.3137 19.3307 21 16.017 21H14.017ZM5.01664 21L5.01664 18C5.01664 16.8954 5.91207 16 7.01664 16H10.0166C10.5689 16 11.0166 15.5523 11.0166 15V9C11.0166 8.44772 10.5689 8 10.0166 8H6.01664C5.46436 8 5.01664 8.44772 5.01664 9V11C5.01664 11.5523 4.56893 12 4.01664 12H3.01664V5H13.0166V15C13.0166 18.3137 10.3303 21 7.01664 21H5.01664Z" />
+                      </svg>
                     </div>
-                    <h3 className="text-2xl font-display font-semibold mb-3 group-hover:text-primary transition-colors">
-                      {project.title}
-                    </h3>
-                    <p className="text-muted-foreground font-light leading-relaxed mb-8 flex-grow">
-                      {project.description}
-                    </p>
-                    <div className="flex items-center justify-between pt-6 border-t border-white/5 mt-auto">
-                      <span className="text-xs text-white/20 font-mono tracking-wider">
-                        {project.date ? formatDistanceToNow(new Date(project.date), { addSuffix: true }) : 'Just now'}
-                      </span>
-                      <ArrowUpRight className="w-5 h-5 text-white/10 group-hover:text-primary group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300" />
+                    <p className="text-xl font-light leading-relaxed text-white/90">"{story.quote}"</p>
+                  </div>
+                  <div className="mt-auto pt-6 border-t border-white/5 flex justify-between items-end">
+                    <div>
+                      <div className="font-display font-bold text-lg mb-1">{story.author}</div>
+                      <div className="text-sm text-white/40 font-mono">{story.role}</div>
                     </div>
-                  </Card>
-                </motion.div>
-              ))}
-            </motion.div>
-          )}
+                    <span className="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-mono border border-primary/20">
+                      {story.metric}
+                    </span>
+                  </div>
+                </Card>
+              </motion.div>
+            ))}
+          </motion.div>
         </div>
       </section>
 
@@ -273,16 +281,20 @@ export default function Landing() {
             className="text-left"
           >
             <motion.h2 variants={fadeIn} className="text-6xl md:text-8xl font-display font-bold tracking-tighter mb-8 leading-[0.9]">
-              STOP<br />STALLING.
+              START<br />CONNECTING.
             </motion.h2>
             <motion.p variants={fadeIn} className="text-xl text-muted-foreground mb-12 font-light max-w-md leading-relaxed">
-              We only accept 10 new builders per month.
-              Selection is manual. Inactivity is a ban.
+              Join a community of serious developers and founders.
+              It's time to take your career seriously. Free to join.
             </motion.p>
             <motion.div variants={fadeIn}>
               <ApplicationDialog>
-                <Button size="lg" className="rounded-full h-12 px-8 bg-white text-black hover:bg-white/90 font-bold text-base tracking-wide transition-all duration-300 shadow-[0_0_15px_rgba(255,255,255,0.1)] hover:shadow-[0_0_25px_rgba(255,255,255,0.3)] hover:scale-105">
+                <Button size="lg" className="rounded-full h-12 px-8 bg-primary text-white hover:bg-primary/90 font-bold text-base tracking-wide transition-all duration-300 shadow-[0_0_20px_rgba(255,100,0,0.4)] hover:shadow-[0_0_35px_rgba(255,100,0,0.6)] hover:scale-105 flex items-center gap-2">
                   Apply for Access
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="translate-y-[0.5px]">
+                    <path d="M5 12h14" />
+                    <path d="M12 5l7 7-7 7" />
+                  </svg>
                 </Button>
               </ApplicationDialog>
             </motion.div>
@@ -310,33 +322,7 @@ export default function Landing() {
       </section>
 
       {/* Footer */}
-      <footer className="w-full py-12 md:py-20 border-t border-white/5 bg-black relative overflow-hidden">
-        <div className="absolute inset-0 bg-primary/5 blur-[100px] pointer-events-none" />
-        <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-12 mb-20">
-            <div className="flex gap-8 font-mono text-sm tracking-widest text-white/40 uppercase">
-              <a href="#" className="hover:text-primary transition-colors">Twitter</a>
-              <a href="#" className="hover:text-primary transition-colors">Manifesto</a>
-              <a href="#" className="hover:text-primary transition-colors">Support</a>
-            </div>
-            <div className="text-xs text-white/20 font-mono uppercase tracking-[0.3em]">
-              &copy; {new Date().getFullYear()} Keep Building.
-            </div>
-          </div>
-
-          <div className="w-full overflow-hidden">
-            <motion.h1
-              initial={{ y: 100, opacity: 0 }}
-              whileInView={{ y: 0, opacity: 1 }}
-              transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-              viewport={{ once: true }}
-              className="text-[12vw] md:text-[14vw] leading-[0.8] font-display font-bold tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white/10 to-transparent select-none text-center"
-            >
-              MOMENTUM
-            </motion.h1>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

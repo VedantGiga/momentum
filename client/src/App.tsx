@@ -5,6 +5,8 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Landing from "@/pages/Landing";
 import Founders from "@/pages/Founders";
+import Admin from "@/pages/Admin";
+import Manifesto from "@/pages/Manifesto";
 import NotFound from "@/pages/not-found";
 import { useEffect } from "react";
 import Lenis from "lenis";
@@ -14,6 +16,8 @@ function Router() {
     <Switch>
       <Route path="/" component={Landing} />
       <Route path="/founders" component={Founders} />
+      <Route path="/manifesto" component={Manifesto} />
+      <Route path="/admin" component={Admin} />
       <Route component={NotFound} />
     </Switch>
   );

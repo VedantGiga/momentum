@@ -14,14 +14,18 @@ export const projects = pgTable("projects", {
 export const applications = pgTable("applications", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
-  email: text("email").notNull(),
+  email: text("email").notNull().unique(),
+  phoneNumber: text("phone_number").notNull(),
   portfolioUrl: text("portfolio_url").notNull(),
   reason: text("reason").notNull(),
+  status: text("status").notNull().default("pending"),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
 export const insertProjectSchema = createInsertSchema(projects).omit({ id: true, date: true });
-export const insertApplicationSchema = createInsertSchema(applications).omit({ id: true, createdAt: true });
+export const insertApplicationSchema = createInsertSchema(applications).omit({ id: true, createdAt: true, status: true }).extend({
+  phoneNumber: z.string().min(10, "Phone number must be at least 10 digits"),
+});
 
 export type Project = typeof projects.$inferSelect;
 export type InsertProject = z.infer<typeof insertProjectSchema>;

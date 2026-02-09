@@ -30,8 +30,12 @@ export function Navbar() {
         `}
       >
         <div className="flex items-center gap-2">
-          <a href="/" className={`font-display font-bold tracking-tighter glow-text transition-all duration-500 ${scrolled ? "text-xl md:text-2xl" : "text-3xl md:text-4xl"}`}>
-            MOMENTUM
+          <a href="/" className="block">
+            <img
+              src="/momentum_logo_4k-1-removebg-preview.png"
+              alt="Stackhouse Logo"
+              className={`object-contain transition-all duration-500 ${scrolled ? "h-8 md:h-12" : "h-14 md:h-18"}`}
+            />
           </a>
         </div>
 
@@ -48,9 +52,13 @@ export function Navbar() {
             <Button
               variant="default"
               size="sm"
-              className={`rounded-full bg-white text-black hover:bg-white/90 transition-all duration-300 font-bold shadow-[0_0_10px_rgba(255,255,255,0.2)] hover:shadow-[0_0_20px_rgba(255,255,255,0.4)] hover:scale-105 ${scrolled ? "h-8 px-4 text-xs" : "h-10 px-6 text-sm"}`}
+              className={`rounded-full bg-primary text-white hover:bg-primary/90 transition-all duration-300 font-bold shadow-[0_0_15px_rgba(255,100,0,0.4)] hover:shadow-[0_0_25px_rgba(255,100,0,0.6)] hover:scale-105 flex items-center gap-2 ${scrolled ? "h-8 px-4 text-xs" : "h-10 px-6 text-sm"}`}
             >
-              APPLY
+              Apply
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="translate-y-[0.5px]">
+                <path d="M5 12h14" />
+                <path d="M12 5l7 7-7 7" />
+              </svg>
             </Button>
           </ApplicationDialog>
         </div>

@@ -97,7 +97,12 @@ app.use((req, res, next) => {
     listenOptions.reusePort = true;
   }
 
-  httpServer.listen(listenOptions, () => {
-    log(`serving on port ${port}`);
-  });
+  // Only start the server if this file is run directly (not imported)
+  if (import.meta.url === `file://${process.argv[1]}`) {
+    httpServer.listen(listenOptions, () => {
+      log(`serving on port ${port}`);
+    });
+  }
 })();
+
+export default app;
