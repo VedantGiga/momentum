@@ -28,7 +28,23 @@ export default function Landing() {
       <Navbar />
 
       {/* Hero Section */}
-      <section className="pt-52 pb-32 px-6 relative overflow-hidden">
+      <section className="pt-64 pb-32 px-6 relative overflow-hidden">
+        {/* Irregular Orange Gradient */}
+        <motion.div 
+          animate={{
+            scale: [1, 1.2, 1],
+            x: [0, 50, 0],
+            y: [0, -30, 0],
+            rotate: [0, 90, 0],
+          }}
+          transition={{
+            duration: 15,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+          className="absolute top-1/4 -right-1/4 w-[600px] h-[600px] bg-primary/10 rounded-full blur-[120px] pointer-events-none mix-blend-screen"
+        />
+
         <div className="max-w-7xl mx-auto relative z-10">
           <motion.div 
             initial="hidden" 
@@ -37,27 +53,27 @@ export default function Landing() {
             variants={stagger} 
             className="max-w-4xl"
           >
-            <motion.h1 variants={fadeIn} className="text-6xl md:text-8xl font-display font-medium tracking-tight leading-[0.9] mb-8">
+            <motion.h1 variants={fadeIn} className="text-6xl md:text-9xl font-display font-medium tracking-tighter leading-[0.8] mb-12 text-left">
               No motivation.<br />
               <span className="text-white/40">Just momentum.</span>
             </motion.h1>
-            <motion.p variants={fadeIn} className="text-xl md:text-2xl text-muted-foreground font-light max-w-2xl leading-relaxed mb-12">
+            <motion.p variants={fadeIn} className="text-xl md:text-3xl text-muted-foreground font-light max-w-2xl leading-tight mb-16 text-left">
               A private community where ambitious builders stop planning and start shipping. 
               Consistency emerges from visibility and expectation.
             </motion.p>
             
-            <motion.div variants={fadeIn} className="flex flex-col sm:flex-row gap-6 items-start sm:items-center">
+            <motion.div variants={fadeIn} className="flex flex-col sm:flex-row gap-8 items-start text-left">
               <ApplicationDialog>
-                <Button size="lg" className="rounded-full h-14 px-10 bg-primary hover:bg-primary/90 text-white font-bold text-lg tracking-wide shadow-[0_0_30px_-10px_var(--primary)] hover:shadow-[0_0_40px_-5px_var(--primary)] transition-all duration-300">
+                <Button size="lg" className="rounded-none h-16 px-12 bg-primary hover:bg-primary/90 text-white font-bold text-xl tracking-wide shadow-[0_0_30px_-10px_var(--primary)] hover:shadow-[0_0_40px_-5px_var(--primary)] transition-all duration-300">
                   Start Building
                 </Button>
               </ApplicationDialog>
-              <div className="flex items-center gap-4 text-sm text-muted-foreground font-mono">
+              <div className="flex items-center gap-6 text-sm text-muted-foreground font-mono">
                 <span className="flex items-center gap-2">
                   <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
                   12 Active Batches
                 </span>
-                <span className="w-px h-4 bg-white/10" />
+                <span className="w-px h-6 bg-white/10" />
                 <span>94% Completion Rate</span>
               </div>
             </motion.div>
@@ -235,7 +251,21 @@ export default function Landing() {
 
       {/* Final CTA */}
       <section className="py-60 px-6 relative text-center overflow-hidden border-t border-white/5">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent pointer-events-none" />
+        {/* Irregular Orange Gradient */}
+        <motion.div 
+          animate={{
+            scale: [1, 1.3, 1],
+            x: [-50, 50, -50],
+            y: [0, 50, 0],
+          }}
+          transition={{
+            duration: 20,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+          className="absolute -bottom-1/4 -left-1/4 w-[800px] h-[800px] bg-primary/5 rounded-full blur-[150px] pointer-events-none mix-blend-screen"
+        />
+
         <motion.div 
           initial="hidden"
           whileInView="visible"
@@ -251,7 +281,7 @@ export default function Landing() {
             Selection is manual. Inactivity is a ban.
           </p>
           <ApplicationDialog>
-            <Button size="lg" className="rounded-full h-20 px-16 bg-white text-black hover:bg-white/90 font-bold text-2xl tracking-tight transition-all duration-500 hover:scale-105 active:scale-95 shadow-2xl">
+            <Button size="lg" className="rounded-none h-20 px-16 bg-white text-black hover:bg-white/90 font-bold text-2xl tracking-tight transition-all duration-500 hover:scale-105 active:scale-95 shadow-2xl">
               Apply for Access
             </Button>
           </ApplicationDialog>

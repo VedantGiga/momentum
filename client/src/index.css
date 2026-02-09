@@ -39,6 +39,10 @@
 }
 
 @layer base {
+  * {
+    @apply border-border;
+    border-radius: 0 !important;
+  }
   body {
     @apply bg-background text-foreground antialiased font-sans selection:bg-primary/20 selection:text-primary;
     background-image: 
