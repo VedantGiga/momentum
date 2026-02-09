@@ -1,0 +1,200 @@
+You are designing a premium landing page for a builders execution community called **Momentum**.
+
+The site must feel:
+serious, focused, high-quality, modern, and intellectually cool.
+
+It should look like a product used by people who care about craft — not a playful startup, not a corporate SaaS, not a motivational community.
+
+This is NOT a course, not networking, not a Discord server.
+It is an execution environment where members consistently ship projects.
+
+The design style should combine:
+minimalism + cinematic gradients + calm authority.
+
+---
+
+VISUAL DIRECTION
+
+Color base:
+Deep charcoal / near black (#0B0B0C)
+
+Gradient style:
+Use subtle atmospheric gradients similar to Stripe, Linear, or Vercel.
+Soft glows, radial fades, blurred color fields.
+Never bright rainbow gradients.
+Gradients should sit in the background, not on text.
+
+Accent color:
+Electric amber / orange (#FF6A00) used sparingly for CTA and highlights only.
+
+Typography:
+Large strong headings
+Clean modern sans serif
+Occasional monospace elements for system feeling
+
+Spacing:
+Very generous whitespace
+Sections must breathe
+
+Lighting feel:
+Soft spotlight or glow behind sections
+Feels like a dark room with illuminated surfaces
+
+Do NOT use:
+cartoons
+illustrations
+stock photos
+playful icons
+emoji
+marketing badges
+feature grids that look SaaS-like
+
+---
+
+NAVBAR
+
+Left: Momentum logo
+Right: Apply button
+
+No extra navigation links.
+
+---
+
+PSYCHOLOGICAL FLOW
+
+Visitor must move through these emotional states:
+curiosity → recognition → belief → trust → exclusivity → application
+
+---
+
+SECTION 1 — HERO
+
+Headline:
+Momentum
+
+Subheadline:
+No motivation. Just momentum.
+
+Support line:
+A place on the internet where people actually finish what they start.
+
+Below it show minimal proof indicators:
+Weekly commitments
+Public progress
+Shipped projects
+
+Primary CTA:
+Apply to Momentum
+
+Hero should feel calm and confident, not loud.
+
+Add subtle animated gradient glow behind hero.
+
+---
+
+SECTION 2 — THE PROBLEM
+
+Short sharp statements describing unfinished builders:
+
+starting projects repeatedly
+saving ideas instead of building
+motivation spikes followed by silence
+learning more than creating
+
+Stacked short lines, not paragraphs.
+
+---
+
+SECTION 3 — THE BELIEF
+
+Explain calmly:
+
+People don’t lack discipline.
+They lack an environment that expects progress.
+
+Consistency emerges from visibility and expectation.
+
+---
+
+SECTION 4 — HOW IT WORKS
+
+Display a clean 4-step system:
+
+Commit
+Show
+Ship
+Reflect
+
+Must look structured and mechanical.
+Use minimal cards or timeline layout.
+
+---
+
+SECTION 5 — OUTCOMES
+
+Realistic results:
+finished projects
+portfolio growth
+execution confidence
+consistent building habit
+
+Avoid exaggerated promises.
+
+---
+
+SECTION 6 — ACTIVITY FEED
+
+Create a “Weekly Ships” preview area.
+Minimal cards showing project activity placeholders.
+
+Feels alive but not noisy.
+
+---
+
+SECTION 7 — WHO IT’S FOR
+
+Two columns:
+
+For:
+builders working on real things
+people comfortable showing progress
+those seeking consistency
+
+Not for:
+passive learners
+course collectors
+motivation seekers
+
+Make this section feel selective.
+
+---
+
+SECTION 8 — APPLY
+
+Explain briefly:
+limited slots
+manual selection
+inactive members removed
+
+CTA:
+Apply to Momentum
+
+---
+
+FOOTER
+
+Minimal.
+Momentum
+Keep building.
+
+---
+
+GLOBAL RULES
+
+No hype marketing language
+No startup clichés
+Tone = calm authority
+Design = premium restraint
+Gradients = atmosphere, not decoration
+
+End result should feel like entering a serious digital workspace with modern product aesthetics.
