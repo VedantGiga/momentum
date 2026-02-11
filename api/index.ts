@@ -17,8 +17,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     try {
+        console.log("[API] Handler started. Calling setupApp...");
+
         // Ensure the app is initialized
         await setupApp();
+        console.log("[API] setupApp completed. Passing to Express...");
 
         // Pass request to Express app
         return app(req, res);

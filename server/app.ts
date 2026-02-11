@@ -39,7 +39,9 @@ let setupPromise: Promise<void> | null = null;
 export async function setupApp() {
     if (!setupPromise) {
         setupPromise = (async () => {
+            console.log("[Server] Registering routes...");
             await registerRoutes(httpServer, app);
+            console.log("[Server] Routes registered.");
             // Error handling middleware
             app.use((err: any, _req: any, res: any, _next: any) => {
                 const status = err.status || err.statusCode || 500;

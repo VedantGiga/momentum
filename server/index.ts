@@ -1,7 +1,6 @@
 import 'dotenv/config';
 import { app, httpServer, setupApp } from "./app";
 import { serveStatic } from "./static";
-import { log } from "./vite"; // Assuming log was utilized or we can redefine it. Actually log function was inline.
 
 // Redefine log since it was inline before
 function log(message: string, source = "express") {
