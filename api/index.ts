@@ -1,21 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import app, { setup } from '../server/index';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-    // Ensure the app is initialized (routes registered, etc.)
-    try {
-        await setup();
-    } catch (err: any) {
-        console.error("Setup failed:", err);
-        res.status(500).json({
-            message: "Server initialization failed",
-            error: err.message,
-            stack: err.stack
-        });
-        return;
-    }
-
-    // Set CORS headers
+    // Set CORS headers early to allow seeing errors in browser
     res.setHeader('Access-Control-Allow-Credentials', 'true');
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
@@ -29,6 +15,21 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         return;
     }
 
-    // Pass request to Express app
-    return app(req, res);
+    try {
+        // Dynamic import to catch top-level errors (like DB connection)
+        const { default: app, setup } = await import('../server/index');
+
+        // Ensure the app is initialized
+        await setup();
+
+        // Pass request to Express app
+        return app(req, res);
+    } catch (err: any) {
+        console.error("Server Initialization/Request Failed:", err);
+        res.status(500).json({
+            message: "Server encountered a critical error during startup or processing",
+            error: err.message,
+            stack: process.env.NODE_ENV === 'development' ? err.stack : undefined
+        });
+    }
 }
