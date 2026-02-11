@@ -15,6 +15,44 @@ export async function registerRoutes(
     res.json(projects);
   });
 
+  // The Pulse - Real-time activity
+  app.get("/api/pulse", async (req, res) => {
+    try {
+      const recentApps = await storage.getRecentApplications(15);
+
+      const logs = recentApps.map(app => {
+        // Obfuscate name (e.g. "John Doe" -> "John D.")
+        const nameParts = app.name.split(" ");
+        const displayName = nameParts.length > 1
+          ? `${nameParts[0]} ${nameParts[nameParts.length - 1][0]}.`
+          : app.name;
+
+        let action = "applied_to_batch";
+        let type = "info";
+
+        if (app.status === 'approved') {
+          action = "joined_network";
+          type = "success";
+        }
+
+        // Randomize location slightly or just use "Global" if we don't have it
+        // Since we don't collect location, we'll simulate a bit or just say "Builder"
+        return {
+          type,
+          text: `${action}: '${displayName}'`,
+          timestamp: app.createdAt
+        };
+      });
+
+      // If we don't have enough real data, we can mix in some system events or just return what we have
+      // For now, let's just return what we have.
+      res.json(logs);
+    } catch (err) {
+      console.error("Pulse API Error:", err);
+      res.status(500).json({ message: "Failed to fetch pulse data" });
+    }
+  });
+
   // Applications
   app.post(api.applications.create.path, async (req, res) => {
     try {
@@ -40,7 +78,9 @@ export async function registerRoutes(
   });
 
   app.get("/api/applications", async (req, res) => {
+    console.log("[GET] Fetching applications");
     const applications = await storage.getApplications();
+    console.log(`[GET] Found ${applications.length} applications`);
     res.json(applications);
   });
 
@@ -48,10 +88,71 @@ export async function registerRoutes(
     const id = parseInt(req.params.id);
     const application = await storage.approveApplication(id);
 
-    // Send invite email
-    const emailSent = await sendInviteEmail(application.email, application.name);
+    // Send invite email with token
+    const emailSent = await sendInviteEmail(application.email, application.name, application.inviteToken!);
 
     res.json({ ...application, emailSent });
+    res.json({ ...application, emailSent });
+  });
+
+  app.delete("/api/applications/:id", async (req, res) => {
+    const id = parseInt(req.params.id);
+    console.log(`[DELETE] Request to delete application ${id}`);
+    await storage.deleteApplication(id);
+    console.log(`[DELETE] Application ${id} deleted`);
+    res.status(204).send();
+  });
+
+  app.post("/api/applications/bulk-approve", async (req, res) => {
+    const { ids } = req.body;
+
+    if (!ids || !Array.isArray(ids)) {
+      return res.status(400).json({ message: "Invalid request: ids array required" });
+    }
+
+    const approvedApps = await storage.bulkApproveApplications(ids);
+    let successCount = 0;
+
+    // Send emails for each approved app
+    for (const app of approvedApps) {
+      try {
+        await sendInviteEmail(app.email, app.name, app.inviteToken!);
+        successCount++;
+      } catch (e) {
+        console.error(`Failed to send email to ${app.email}`, e);
+      }
+    }
+
+    res.json({
+      count: approvedApps.length,
+      emailSuccessCount: successCount,
+      message: `Approved ${approvedApps.length} applications`
+    });
+  });
+
+  app.get("/api/join", async (req, res) => {
+    const token = req.query.token as string;
+
+    if (!token) {
+      return res.status(400).send("Invalid invite link.");
+    }
+
+    const app = await storage.getAppByToken(token);
+
+    if (!app) {
+      return res.status(403).send("Invalid or expired invite link.");
+    }
+
+    if (app.isInviteUsed) {
+      return res.status(403).send("This invite link has already been used.");
+    }
+
+    // Mark as used
+    await storage.markInviteUsed(app.id);
+
+    // Redirect to WhatsApp
+    const whatsappLink = "https://chat.whatsapp.com/FvYwe8mMWq8CA3sis5iWV4";
+    res.redirect(whatsappLink);
   });
 
   // Seed initial data if empty

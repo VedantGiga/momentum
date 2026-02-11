@@ -7,6 +7,8 @@ import { ArrowUpRight, Check, Rocket, Repeat, Terminal, Users, Clock, ShieldAler
 import { formatDistanceToNow } from "date-fns";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { FilterSection } from "@/components/sections/FilterSection";
+import { PulseSection } from "@/components/sections/PulseSection";
 
 const fadeIn = {
   hidden: { opacity: 0, y: 30 },
@@ -149,6 +151,9 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* The Filter */}
+      <FilterSection />
+
       {/* The Belief */}
       <section className="py-40 px-6 relative">
         <motion.div
@@ -199,6 +204,9 @@ export default function Landing() {
           </motion.div>
         </div>
       </section>
+
+      {/* The Pulse */}
+      <PulseSection />
 
       {/* Success Stories */}
       <section className="py-40 px-6">

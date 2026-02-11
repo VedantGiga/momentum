@@ -3,6 +3,8 @@ import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { serveStatic } from "./static";
 import { createServer } from "http";
+import { fileURLToPath } from "url";
+import path from "path";
 
 const app = express();
 const httpServer = createServer(app);
@@ -97,10 +99,23 @@ app.use((req, res, next) => {
     listenOptions.reusePort = true;
   }
 
+  // Validate environment variables
+  if (!process.env.DATABASE_URL) {
+    console.warn(
+      "Warning: DATABASE_URL is not set. Database features may not work correctly."
+    );
+  }
+
+  const __filename = fileURLToPath(import.meta.url);
+
   // Only start the server if this file is run directly (not imported)
-  if (import.meta.url === `file://${process.argv[1]}`) {
+  // Check if the current file is the entry point
+  const isMainModule = path.resolve(process.argv[1]) === path.resolve(__filename);
+
+  if (isMainModule) {
     httpServer.listen(listenOptions, () => {
       log(`serving on port ${port}`);
+      log(`Pulse API active at /api/pulse`);
     });
   }
 })();

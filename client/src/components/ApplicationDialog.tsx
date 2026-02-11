@@ -25,7 +25,6 @@ export function ApplicationDialog({ children }: ApplicationDialogProps) {
     defaultValues: {
       name: "",
       email: "",
-      phoneNumber: "",
       portfolioUrl: "",
       reason: "",
     },
@@ -109,30 +108,7 @@ export function ApplicationDialog({ children }: ApplicationDialogProps) {
               )}
             />
 
-            <FormField
-              control={form.control}
-              name="phoneNumber"
-              render={({ field }) => (
-                <FormItem className="space-y-1">
-                  <FormLabel className="text-[10px] uppercase tracking-widest text-muted-foreground font-mono">
-                    WhatsApp Number <span className="text-primary">*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      type="tel"
-                      required
-                      className="bg-white/5 border-white/10 focus:border-primary/50 text-white h-9 rounded-none text-sm transition-all duration-300"
-                      placeholder="+1 (555) 000-0000"
-                    />
-                  </FormControl>
-                  <p className="text-[9px] text-muted-foreground/60 font-mono">
-                    Include country code (e.g. +1)
-                  </p>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+
 
             <FormField
               control={form.control}

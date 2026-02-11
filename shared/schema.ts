@@ -1,4 +1,4 @@
-import { pgTable, text, serial, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, timestamp, boolean } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -15,17 +15,16 @@ export const applications = pgTable("applications", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
   email: text("email").notNull().unique(),
-  phoneNumber: text("phone_number").notNull(),
   portfolioUrl: text("portfolio_url").notNull(),
   reason: text("reason").notNull(),
   status: text("status").notNull().default("pending"),
+  inviteToken: text("invite_token").unique(),
+  isInviteUsed: boolean("is_invite_used").default(false).notNull(),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
 export const insertProjectSchema = createInsertSchema(projects).omit({ id: true, date: true });
-export const insertApplicationSchema = createInsertSchema(applications).omit({ id: true, createdAt: true, status: true }).extend({
-  phoneNumber: z.string().min(10, "Phone number must be at least 10 digits"),
-});
+export const insertApplicationSchema = createInsertSchema(applications).omit({ id: true, createdAt: true, status: true });
 
 export type Project = typeof projects.$inferSelect;
 export type InsertProject = z.infer<typeof insertProjectSchema>;

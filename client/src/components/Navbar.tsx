@@ -32,9 +32,9 @@ export function Navbar() {
         <div className="flex items-center gap-2">
           <a href="/" className="block">
             <img
-              src="/momentum_logo_4k-1-removebg-preview.png"
+              src="/stackhouse_sh_logo_1770802864846-removebg-preview (1).png"
               alt="Stackhouse Logo"
-              className={`object-contain transition-all duration-500 ${scrolled ? "h-8 md:h-12" : "h-14 md:h-18"}`}
+              className={`object-contain transition-all duration-500 ${scrolled ? "h-8 md:h-10" : "h-12 md:h-16"}`}
             />
           </a>
         </div>
@@ -88,6 +88,7 @@ export function Navbar() {
             <div className="flex flex-col gap-6 text-2xl font-display font-medium text-white">
               <a href="/founders" onClick={() => setMobileMenuOpen(false)}>Founders</a>
               <a href="/manifesto" onClick={() => setMobileMenuOpen(false)}>Manifesto</a>
+              <a href="/support" onClick={() => setMobileMenuOpen(false)}>Support</a>
             </div>
             <div className="mt-auto">
               <ApplicationDialog>

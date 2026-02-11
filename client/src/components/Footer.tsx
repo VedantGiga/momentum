@@ -6,10 +6,10 @@ export function Footer() {
             <div className="absolute inset-0 bg-primary/5 blur-[100px] pointer-events-none" />
             <div className="max-w-7xl mx-auto px-6 relative z-10">
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-12 mb-20">
-                    <div className="flex gap-8 font-mono text-sm tracking-widest text-white/40 uppercase">
-                        <a href="#" className="hover:text-primary transition-colors">Twitter</a>
+                    <div className="flex flex-col md:flex-row items-center gap-6 md:gap-12 text-sm font-light text-white/40">
+                        <a href="/donate" className="hover:text-primary transition-colors">Donate</a>
                         <a href="/manifesto" className="hover:text-primary transition-colors">Manifesto</a>
-                        <a href="#" className="hover:text-primary transition-colors">Support</a>
+                        <a href="/support" className="hover:text-primary transition-colors">Support</a>
                     </div>
                     <div className="text-xs text-white/20 font-mono uppercase tracking-[0.3em]">
                         &copy; {new Date().getFullYear()} Keep Building.

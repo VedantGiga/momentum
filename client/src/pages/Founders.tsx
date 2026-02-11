@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Navbar } from "@/components/Navbar";
 import { Card } from "@/components/ui/card";
-import { Terminal, Github, Twitter, Linkedin } from "lucide-react";
+import { Terminal, Github, Linkedin } from "lucide-react";
 import { Footer } from "@/components/Footer";
 
 const founders = [
@@ -10,7 +10,7 @@ const founders = [
     role: "Founder",
     bio: "Building the future of community for builders. Obsessed with shipping and creating environments where ambition thrives.",
     image: "/rajat.jpg",
-    twitter: "rajat_builds",
+    linkedin: "https://www.linkedin.com/in/rajat-jhade-5b928730a/",
     github: "rajat-oss"
   },
   {
@@ -18,7 +18,7 @@ const founders = [
     role: "Co-Founder",
     bio: "Passionate about empowering developers. Focused on creating scalable systems and fostering innovation.",
     image: "/vedant.jpg",
-    twitter: "vedant_vyas",
+    linkedin: "https://www.linkedin.com/in/vedant-vyas-1620062a9",
     github: "VedantGiga"
   }
 ];
@@ -73,8 +73,8 @@ export default function Founders() {
                       <a href={`https://github.com/${founder.github}`} target="_blank" rel="noopener noreferrer" className="text-white/20 hover:text-white transition-colors">
                         <Github className="w-5 h-5" />
                       </a>
-                      <a href={`https://twitter.com/${founder.twitter}`} target="_blank" rel="noopener noreferrer" className="text-white/20 hover:text-white transition-colors">
-                        <Twitter className="w-5 h-5" />
+                      <a href={founder.linkedin} target="_blank" rel="noopener noreferrer" className="text-white/20 hover:text-white transition-colors">
+                        <Linkedin className="w-5 h-5" />
                       </a>
                     </div>
                   </div>
