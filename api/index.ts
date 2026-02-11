@@ -1,4 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
+import app, { setup } from '../server/index';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
     // Set CORS headers early to allow seeing errors in browser
@@ -16,9 +17,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     try {
-        // Dynamic import to catch top-level errors (like DB connection)
-        const { default: app, setup } = await import('../server/index');
-
         // Ensure the app is initialized
         await setup();
 
