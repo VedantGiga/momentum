@@ -1,7 +1,10 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import app from '../server/index';
+import app, { setup } from '../server/index';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+    // Ensure the app is initialized (routes registered, etc.)
+    await setup();
+
     // Set CORS headers
     res.setHeader('Access-Control-Allow-Credentials', 'true');
     res.setHeader('Access-Control-Allow-Origin', '*');

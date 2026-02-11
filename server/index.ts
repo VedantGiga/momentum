@@ -62,62 +62,48 @@ app.use((req, res, next) => {
   next();
 });
 
-(async () => {
-  await registerRoutes(httpServer, app);
+// Setup function to initialize the app
+let setupPromise: Promise<void> | null = null;
+export function setup() {
+  if (!setupPromise) {
+    setupPromise = (async () => {
+      await registerRoutes(httpServer, app);
 
-  app.use((err: any, _req: Request, res: Response, next: NextFunction) => {
-    const status = err.status || err.statusCode || 500;
-    const message = err.message || "Internal Server Error";
+      app.use((err: any, _req: Request, res: Response, next: NextFunction) => {
+        const status = err.status || err.statusCode || 500;
+        const message = err.message || "Internal Server Error";
+        if (res.headersSent) return next(err);
+        res.status(status).json({ message });
+      });
 
-    console.error("Internal Server Error:", err);
+      if (process.env.NODE_ENV === "production") {
+        serveStatic(app);
+      } else {
+        const { setupVite } = await import("./vite");
+        await setupVite(httpServer, app);
+      }
+    })();
+  }
+  return setupPromise;
+}
 
-    if (res.headersSent) {
-      return next(err);
+// Start server if main module
+const __filename = fileURLToPath(import.meta.url);
+const isMainModule = path.resolve(process.argv[1]) === path.resolve(__filename);
+
+if (isMainModule) {
+  setup().then(() => {
+    const port = parseInt(process.env.PORT || "5000", 10);
+    const listenOptions: any = { port, host: "0.0.0.0" };
+    if (process.platform !== "win32") {
+      listenOptions.reusePort = true;
     }
 
-    return res.status(status).json({ message });
-  });
-
-  // importantly only setup vite in development and after
-  // setting up all the other routes so the catch-all route
-  // doesn't interfere with the other routes
-  if (process.env.NODE_ENV === "production") {
-    serveStatic(app);
-  } else {
-    const { setupVite } = await import("./vite");
-    await setupVite(httpServer, app);
-  }
-
-  // ALWAYS serve the app on the port specified in the environment variable PORT
-  // Other ports are firewalled. Default to 5000 if not specified.
-  // this serves both the API and the client.
-  // It is the only port that is not firewalled.
-  const port = parseInt(process.env.PORT || "5000", 10);
-  const listenOptions: any = { port, host: "0.0.0.0" };
-  // `reusePort` is not supported on some platforms (notably Windows).
-  if (process.platform !== "win32") {
-    listenOptions.reusePort = true;
-  }
-
-  // Validate environment variables
-  if (!process.env.DATABASE_URL) {
-    console.warn(
-      "Warning: DATABASE_URL is not set. Database features may not work correctly."
-    );
-  }
-
-  const __filename = fileURLToPath(import.meta.url);
-
-  // Only start the server if this file is run directly (not imported)
-  // Check if the current file is the entry point
-  const isMainModule = path.resolve(process.argv[1]) === path.resolve(__filename);
-
-  if (isMainModule) {
     httpServer.listen(listenOptions, () => {
       log(`serving on port ${port}`);
       log(`Pulse API active at /api/pulse`);
     });
-  }
-})();
+  });
+}
 
 export default app;
