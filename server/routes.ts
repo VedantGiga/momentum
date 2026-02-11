@@ -29,11 +29,11 @@ export async function registerRoutes(
         });
       } else {
         const message = (err as Error).message;
-        if (message.includes("already exists")) {
-          res.status(409).json({ message });
+        if (message.includes("already exists") || message.includes("unique constraint")) {
+          res.status(409).json({ message: "Application with this email already exists" });
         } else {
           console.error("Application create error:", err);
-          res.status(500).json({ message: "Internal server error" });
+          res.status(500).json({ message: `Internal server error: ${message}`, details: JSON.stringify(err) });
         }
       }
     }
