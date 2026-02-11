@@ -3,7 +3,17 @@ import app, { setup } from '../server/index';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
     // Ensure the app is initialized (routes registered, etc.)
-    await setup();
+    try {
+        await setup();
+    } catch (err: any) {
+        console.error("Setup failed:", err);
+        res.status(500).json({
+            message: "Server initialization failed",
+            error: err.message,
+            stack: err.stack
+        });
+        return;
+    }
 
     // Set CORS headers
     res.setHeader('Access-Control-Allow-Credentials', 'true');
