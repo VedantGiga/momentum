@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import app, { setup } from '../server/index';
+import { app, setupApp } from '../server/app';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
     // Set CORS headers early to allow seeing errors in browser
@@ -18,7 +18,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     try {
         // Ensure the app is initialized
-        await setup();
+        await setupApp();
 
         // Pass request to Express app
         return app(req, res);
