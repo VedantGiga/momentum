@@ -1,5 +1,10 @@
 import * as esbuild from "esbuild";
 
+if (process.env.VERCEL) {
+  console.log("Skipping server build on Vercel");
+  process.exit(0);
+}
+
 await esbuild.build({
     entryPoints: ["server/index.ts"],
     bundle: true,
