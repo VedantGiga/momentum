@@ -5,7 +5,7 @@ import { apiRequest, queryClient } from "@/lib/queryClient";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Check, MessageCircle, LogOut } from "lucide-react";
+import { Loader2, Check, MessageCircle, LogOut, Search, MoreHorizontal, X, FileText, User, Mail, Globe } from "lucide-react";
 import { format } from "date-fns";
 import {
     Dialog,
@@ -14,6 +14,24 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export default function Admin() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -21,29 +39,35 @@ export default function Admin() {
     const [selectedIds, setSelectedIds] = useState<number[]>([]);
     const [activeTab, setActiveTab] = useState<"pending" | "approved">("pending");
     const [viewApp, setViewApp] = useState<Application | null>(null);
+    const [searchQuery, setSearchQuery] = useState("");
     const { toast } = useToast();
-
-    // Dialog Imports (assuming shadcn structure)
-    // We need to import these at top level
-
 
     const { data: applications, isLoading } = useQuery<Application[]>({
         queryKey: ["/api/applications"],
         enabled: isAuthenticated,
     });
 
-    // Calculate stats & Split lists
-    const pendingApps = applications?.filter(app => app.status === 'pending') || [];
-    const approvedApps = applications?.filter(app => app.status === 'approved') || [];
+    const filteredApps = applications?.filter(app => {
+        const matchesTab = app.status === activeTab;
+        const searchLower = searchQuery.toLowerCase();
+        const matchesSearch =
+            app.name.toLowerCase().includes(searchLower) ||
+            app.email.toLowerCase().includes(searchLower) ||
+            app.portfolioUrl.toLowerCase().includes(searchLower);
+        return matchesTab && matchesSearch;
+    }) || [];
+
+    const stats = {
+        total: applications?.length || 0,
+        approved: applications?.filter(app => app.status === 'approved').length || 0,
+        pending: applications?.filter(app => app.status === 'pending').length || 0,
+    };
 
     // Clear selection on tab change
     useEffect(() => {
         setSelectedIds([]);
     }, [activeTab]);
 
-    // Stats for tracker
-    const totalRequests = applications?.length || 0;
-    const totalApproved = approvedApps.length;
 
     const approveMutation = useMutation({
         mutationFn: async (id: number) => {
@@ -114,10 +138,10 @@ export default function Admin() {
     };
 
     const toggleSelectAll = () => {
-        if (selectedIds.length === pendingApps.length && pendingApps.length > 0) {
+        if (selectedIds.length === filteredApps.length && filteredApps.length > 0) {
             setSelectedIds([]);
         } else {
-            setSelectedIds(pendingApps.map(app => app.id));
+            setSelectedIds(filteredApps.map(app => app.id));
         }
     };
 
@@ -143,22 +167,23 @@ export default function Admin() {
 
     return (
         <div className="min-h-screen bg-black text-white p-4 md:p-8">
-            <div className="max-w-7xl mx-auto">
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-                    <div>
-                        <h1 className="text-3xl md:text-4xl font-display font-medium mb-2">Applications</h1>
+            <div className="max-w-7xl mx-auto space-y-8">
+                {/* Header Section */}
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+                    <div className="space-y-2">
+                        <h1 className="text-3xl md:text-4xl font-display font-medium">Applications</h1>
                         <p className="text-white/40 text-sm md:text-base">Manage incoming membership requests</p>
                     </div>
 
-                    {/* Tracker */}
-                    <div className="flex gap-4">
-                        <div className="bg-white/5 border border-white/10 rounded-lg p-3 text-center min-w-[120px]">
-                            <div className="text-2xl font-medium">{totalApproved}</div>
-                            <div className="text-xs text-white/40 uppercase tracking-widest">Approved</div>
-                        </div>
-                        <div className="bg-white/5 border border-white/10 rounded-lg p-3 text-center min-w-[120px]">
-                            <div className="text-2xl font-medium">{totalRequests}</div>
-                            <div className="text-xs text-white/40 uppercase tracking-widest">Total</div>
+                    <div className="flex flex-wrap items-center gap-4 w-full md:w-auto">
+                        <div className="relative flex-1 md:w-64">
+                            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-white/40" />
+                            <Input
+                                placeholder="Search applications..."
+                                className="pl-9 bg-white/5 border-white/10 text-white"
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                            />
                         </div>
                         <Button
                             variant="outline"
@@ -166,7 +191,7 @@ export default function Admin() {
                                 setIsAuthenticated(false);
                                 window.localStorage.removeItem("admin_auth");
                             }}
-                            className="border-white/10 text-white hover:bg-white/5 h-auto py-3 md:ml-4"
+                            className="border-white/10 text-white hover:bg-white/5"
                         >
                             <LogOut className="w-4 h-4 mr-2" />
                             Logout
@@ -174,7 +199,36 @@ export default function Admin() {
                     </div>
                 </div>
 
-
+                {/* Stats Cards */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <Card className="bg-white/5 border-white/10">
+                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                            <CardTitle className="text-sm font-medium text-white/40">Total</CardTitle>
+                            <FileText className="h-4 w-4 text-white/40" />
+                        </CardHeader>
+                        <CardContent>
+                            <div className="text-2xl font-bold text-white">{stats.total}</div>
+                        </CardContent>
+                    </Card>
+                    <Card className="bg-white/5 border-white/10">
+                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                            <CardTitle className="text-sm font-medium text-white/40">Pending</CardTitle>
+                            <div className="h-2 w-2 rounded-full bg-yellow-500/50" />
+                        </CardHeader>
+                        <CardContent>
+                            <div className="text-2xl font-bold text-white">{stats.pending}</div>
+                        </CardContent>
+                    </Card>
+                    <Card className="bg-white/5 border-white/10">
+                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                            <CardTitle className="text-sm font-medium text-white/40">Approved</CardTitle>
+                            <div className="h-2 w-2 rounded-full bg-green-500/50" />
+                        </CardHeader>
+                        <CardContent>
+                            <div className="text-2xl font-bold text-white">{stats.approved}</div>
+                        </CardContent>
+                    </Card>
+                </div>
 
                 {isLoading ? (
                     <div className="flex justify-center py-20">
@@ -182,246 +236,228 @@ export default function Admin() {
                     </div>
                 ) : (
                     <div className="space-y-6">
-                        {/* Tabs */}
-                        <div className="flex items-center gap-4 border-b border-white/10">
-                            <button
-                                onClick={() => setActiveTab("pending")}
-                                className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors ${activeTab === "pending"
-                                    ? "border-primary text-white"
-                                    : "border-transparent text-white/40 hover:text-white/70"
-                                    }`}
-                            >
-                                Pending Requests ({pendingApps.length})
-                            </button>
-                            <button
-                                onClick={() => setActiveTab("approved")}
-                                className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors ${activeTab === "approved"
-                                    ? "border-primary text-white"
-                                    : "border-transparent text-white/40 hover:text-white/70"
-                                    }`}
-                            >
-                                Approved Members ({approvedApps.length})
-                            </button>
+                        {/* Tabs & Bulk Actions */}
+                        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-white/10 pb-4">
+                            <div className="flex items-center gap-1 overflow-x-auto no-scrollbar w-full sm:w-auto">
+                                <Button
+                                    variant={activeTab === "pending" ? "secondary" : "ghost"}
+                                    onClick={() => setActiveTab("pending")}
+                                    className={`rounded-full ${activeTab === "pending" ? "bg-white text-black hover:bg-white/90" : "text-white/60 hover:text-white"}`}
+                                >
+                                    Pending ({stats.pending})
+                                </Button>
+                                <Button
+                                    variant={activeTab === "approved" ? "secondary" : "ghost"}
+                                    onClick={() => setActiveTab("approved")}
+                                    className={`rounded-full ${activeTab === "approved" ? "bg-white text-black hover:bg-white/90" : "text-white/60 hover:text-white"}`}
+                                >
+                                    Approved ({stats.approved})
+                                </Button>
+                            </div>
+
+                            {activeTab === "pending" && selectedIds.length > 0 && (
+                                <div className="flex items-center gap-2 animate-in fade-in slide-in-from-right-5">
+                                    <span className="text-sm text-white/60 hidden sm:inline">{selectedIds.length} selected</span>
+                                    <Button
+                                        size="sm"
+                                        onClick={() => bulkApproveMutation.mutate(selectedIds)}
+                                        disabled={bulkApproveMutation.isPending}
+                                        className="bg-primary hover:bg-primary/90 text-white"
+                                    >
+                                        {bulkApproveMutation.isPending ? <Loader2 className="w-3 h-3 animate-spin" /> : <><Check className="w-3 h-3 mr-2" /> Approve Selected</>}
+                                    </Button>
+                                </div>
+                            )}
                         </div>
 
-                        {/* Pending Tab */}
-                        {activeTab === "pending" && (
-                            <section className="animate-in fade-in slide-in-from-top-2 duration-300">
-                                <div className="flex items-center justify-between mb-4">
-                                    <div className="text-sm text-white/40">
-                                        Review and manage incoming applications.
-                                    </div>
-                                    {/* Bulk Actions Bar */}
-                                    {selectedIds.length > 0 && (
-                                        <div className="bg-primary/10 border border-primary/20 rounded-lg px-4 py-2 flex items-center gap-4">
-                                            <span className="text-primary text-sm font-medium">{selectedIds.length} selected</span>
-                                            <Button
-                                                size="sm"
-                                                onClick={() => bulkApproveMutation.mutate(selectedIds)}
-                                                disabled={bulkApproveMutation.isPending}
-                                                className="bg-primary hover:bg-primary/90 text-white h-8"
-                                            >
-                                                {bulkApproveMutation.isPending ? <Loader2 className="w-3 h-3 animate-spin" /> : <><Check className="w-3 h-3 mr-2" /> Approve</>}
-                                            </Button>
-                                        </div>
-                                    )}
-                                </div>
-
-                                <div className="grid gap-4">
-                                    {/* Desktop Header */}
-                                    <div className="hidden md:grid grid-cols-[auto_2fr_3fr_3fr_2fr_1fr] gap-4 text-xs font-mono uppercase tracking-widest text-white/40 border-b border-white/10 pb-4 px-4 items-center">
-                                        <div className="w-5">
-                                            <input
-                                                type="checkbox"
-                                                className="rounded border-white/20 bg-white/5"
-                                                onChange={toggleSelectAll}
-                                                checked={pendingApps.length > 0 && selectedIds.length === pendingApps.length}
-                                            />
-                                        </div>
-                                        <div>Name</div>
-                                        <div>Contact</div>
-                                        <div>Reason</div>
-                                        <div>Date</div>
-                                        <div className="text-right">Actions</div>
-                                    </div>
-
-                                    <div className="space-y-4">
-                                        {pendingApps.map((app) => (
-                                            <div
-                                                key={app.id}
-                                                className="flex flex-col md:grid md:grid-cols-[auto_2fr_3fr_3fr_2fr_1fr] gap-4 bg-white/5 border border-white/5 p-4 rounded-lg transition-colors hover:border-white/10"
-                                            >
-                                                {/* Checkbox */}
-                                                <div className="hidden md:flex items-center">
-                                                    <input
-                                                        type="checkbox"
-                                                        className="rounded border-white/20 bg-white/5 cursor-pointer"
-                                                        checked={selectedIds.includes(app.id)}
-                                                        onChange={() => toggleSelection(app.id)}
-                                                    />
-                                                </div>
-
-                                                {/* Name */}
-                                                <div className="font-medium flex justify-between items-center md:block">
-                                                    <span className="md:hidden text-xs text-white/40 font-mono uppercase">Name</span>
-                                                    <div className="flex items-center gap-3">
+                        {/* Desktop Table View */}
+                        <div className="hidden md:block rounded-md border border-white/10 bg-white/5 overflow-hidden">
+                            <Table>
+                                <TableHeader>
+                                    <TableRow className="border-white/10 hover:bg-white/5">
+                                        {activeTab === "pending" && (
+                                            <TableHead className="w-12">
+                                                <input
+                                                    type="checkbox"
+                                                    className="rounded border-white/20 bg-white/5 cursor-pointer"
+                                                    onChange={toggleSelectAll}
+                                                    checked={filteredApps.length > 0 && selectedIds.length === filteredApps.length}
+                                                />
+                                            </TableHead>
+                                        )}
+                                        <TableHead className="text-white/40">Name</TableHead>
+                                        <TableHead className="text-white/40">Contact</TableHead>
+                                        <TableHead className="text-white/40">Reason</TableHead>
+                                        <TableHead className="text-white/40">Applied</TableHead>
+                                        <TableHead className="text-right text-white/40">Actions</TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    {filteredApps.length === 0 ? (
+                                        <TableRow>
+                                            <TableCell colSpan={6} className="h-24 text-center text-white/40">
+                                                No results found.
+                                            </TableCell>
+                                        </TableRow>
+                                    ) : (
+                                        filteredApps.map((app) => (
+                                            <TableRow key={app.id} className="border-white/10 hover:bg-white/5 transition-colors">
+                                                {activeTab === "pending" && (
+                                                    <TableCell>
                                                         <input
                                                             type="checkbox"
-                                                            className="md:hidden rounded border-white/20 bg-white/5 cursor-pointer"
+                                                            className="rounded border-white/20 bg-white/5 cursor-pointer"
                                                             checked={selectedIds.includes(app.id)}
                                                             onChange={() => toggleSelection(app.id)}
                                                         />
-                                                        <span>{app.name}</span>
+                                                    </TableCell>
+                                                )}
+                                                <TableCell className="font-medium text-white break-words max-w-[150px]">{app.name}</TableCell>
+                                                <TableCell className="max-w-[200px]">
+                                                    <div className="flex flex-col gap-1">
+                                                        <span className="text-white/80 text-xs break-words">{app.email}</span>
+                                                        <a href={app.portfolioUrl.startsWith('http') ? app.portfolioUrl : `https://${app.portfolioUrl}`} target="_blank" rel="noopener noreferrer" className="text-primary text-xs hover:underline truncate">
+                                                            Website
+                                                        </a>
+                                                    </div>
+                                                </TableCell>
+                                                <TableCell className="max-w-[250px]">
+                                                    <button onClick={() => setViewApp(app)} className="text-left hover:text-white transition-colors">
+                                                        <p className="truncate text-white/60 text-sm max-w-[240px]">{app.reason}</p>
+                                                    </button>
+                                                </TableCell>
+                                                <TableCell className="text-white/60 text-sm whitespace-nowrap">
+                                                    {format(new Date(app.createdAt!), "MMM d, yyyy")}
+                                                </TableCell>
+                                                <TableCell className="text-right">
+                                                    {app.status === 'pending' ? (
+                                                        <div className="flex items-center justify-end gap-2">
+                                                            <Button size="sm" className="bg-primary hover:bg-primary/90 text-white" onClick={() => approveMutation.mutate(app.id)}>
+                                                                <Check className="h-4 w-4 mr-1.5" /> Approve
+                                                            </Button>
+                                                            <Button size="sm" variant="destructive" className="bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/20" onClick={() => declineMutation.mutate(app.id)}>
+                                                                <X className="h-4 w-4 mr-1.5" /> Decline
+                                                            </Button>
+                                                        </div>
+                                                    ) : (
+                                                        <Badge variant="outline" className="border-green-500/20 text-green-500 bg-green-500/10">Approved</Badge>
+                                                    )}
+                                                </TableCell>
+                                            </TableRow>
+                                        ))
+                                    )}
+                                </TableBody>
+                            </Table>
+                        </div>
+
+                        {/* Mobile Card View */}
+                        <div className="grid gap-4 md:hidden">
+                            {filteredApps.length === 0 ? (
+                                <div className="text-center py-12 text-white/40 bg-white/5 rounded-lg border border-white/5 border-dashed">
+                                    No results found.
+                                </div>
+                            ) : (
+                                filteredApps.map((app) => (
+                                    <Card key={app.id} className="bg-white/5 border-white/10 mb-4 transition-all active:scale-[0.99]">
+                                        <CardHeader className="pb-2">
+                                            <div className="flex justify-between items-start gap-3">
+                                                <div className="flex items-start gap-3 min-w-0">
+                                                    {activeTab === "pending" && (
+                                                        <input
+                                                            type="checkbox"
+                                                            className="rounded border-white/20 bg-white/5 cursor-pointer mt-1"
+                                                            checked={selectedIds.includes(app.id)}
+                                                            onChange={() => toggleSelection(app.id)}
+                                                        />
+                                                    )}
+                                                    <div className="min-w-0 max-w-full">
+                                                        <CardTitle className="text-base font-medium text-white break-words leading-tight mb-1">
+                                                            {app.name}
+                                                        </CardTitle>
+                                                        <div className="text-xs text-white/50">{format(new Date(app.createdAt!), "PPP")}</div>
                                                     </div>
                                                 </div>
-
-                                                {/* Contact */}
-                                                <div className="space-y-1">
-                                                    <div className="md:hidden text-xs text-white/40 font-mono uppercase mb-1">Contact</div>
-                                                    <div className="text-sm">{app.email}</div>
-                                                    <a href={app.portfolioUrl.startsWith('http') ? app.portfolioUrl : `https://${app.portfolioUrl}`} target="_blank" rel="noopener noreferrer" className="text-xs text-primary hover:underline font-mono truncate block">
-                                                        {app.portfolioUrl}
+                                                {app.status === 'approved' && (
+                                                    <Badge variant="outline" className="border-green-500/20 text-green-500 bg-green-500/10 text-[10px] px-2 py-0.5 h-auto">Approved</Badge>
+                                                )}
+                                            </div>
+                                        </CardHeader>
+                                        <CardContent className="space-y-4 pb-4">
+                                            <div className="space-y-2">
+                                                <div className="flex items-center gap-2 text-sm text-white/70 min-w-0">
+                                                    <Mail className="h-3 w-3 shrink-0" />
+                                                    <span className="truncate break-all">{app.email}</span>
+                                                </div>
+                                                <div className="flex items-center gap-2 text-sm text-white/70 min-w-0">
+                                                    <Globe className="h-3 w-3 shrink-0" />
+                                                    <a href={app.portfolioUrl.startsWith('http') ? app.portfolioUrl : `https://${app.portfolioUrl}`} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline truncate">
+                                                        Portfolio Link
                                                     </a>
                                                 </div>
+                                            </div>
 
-                                                {/* Reason */}
-                                                <div className="text-sm text-white/70 min-w-0">
-                                                    <div className="md:hidden text-xs text-white/40 font-mono uppercase mb-1">Reason</div>
-                                                    <p
-                                                        className="line-clamp-2 text-white/60 hover:text-white cursor-pointer transition-colors break-all"
-                                                        onClick={() => setViewApp(app)}
-                                                    >
-                                                        {app.reason}
-                                                    </p>
-                                                </div>
+                                            <div onClick={() => setViewApp(app)} className="bg-black/20 p-3 rounded text-sm text-white/60 hover:text-white/80 cursor-pointer transition-colors border border-white/5">
+                                                <p className="line-clamp-2 italic">"{app.reason}"</p>
+                                            </div>
 
-                                                {/* Date */}
-                                                <div className="text-xs text-white/40 font-mono flex justify-between items-center md:block">
-                                                    <span className="md:hidden uppercase">Applied</span>
-                                                    <span>{format(new Date(app.createdAt!), "MMM d, yyyy")}</span>
-                                                </div>
-
-                                                {/* Actions */}
-                                                <div className="text-right mt-2 md:mt-0 flex justify-end gap-2">
-                                                    <Button
-                                                        size="sm"
-                                                        onClick={() => approveMutation.mutate(app.id)}
-                                                        disabled={approveMutation.isPending}
-                                                        className="bg-primary hover:bg-primary/90 text-white h-9 md:h-8 text-xs flex-1 md:flex-none"
-                                                    >
-                                                        {approveMutation.isPending ? <Loader2 className="w-3 h-3 animate-spin" /> : <><MessageCircle className="w-3 h-3 md:mr-1.5" /><span className="hidden md:inline">Approve</span></>}
+                                            {app.status === 'pending' && (
+                                                <div className="flex gap-2 pt-2">
+                                                    <Button className="flex-1 bg-white/10 hover:bg-white/20 text-white border-0" variant="outline" onClick={() => declineMutation.mutate(app.id)}>
+                                                        Decline
                                                     </Button>
-                                                    <Button
-                                                        size="sm"
-                                                        variant="destructive"
-                                                        onClick={() => declineMutation.mutate(app.id)}
-                                                        disabled={declineMutation.isPending}
-                                                        className="bg-red-500/20 hover:bg-red-500/30 text-red-500 border border-red-500/50 h-9 md:h-8 text-xs flex-1 md:flex-none"
-                                                    >
-                                                        {declineMutation.isPending ? <Loader2 className="w-3 h-3 animate-spin" /> : "Decline"}
+                                                    <Button className="flex-1 bg-primary hover:bg-primary/90 text-white" onClick={() => approveMutation.mutate(app.id)}>
+                                                        Approve
                                                     </Button>
                                                 </div>
-                                            </div>
-                                        ))}
-
-                                        {pendingApps.length === 0 && (
-                                            <div className="text-center py-12 text-white/40 bg-white/5 rounded-lg border border-white/5 border-dashed">
-                                                No pending applications.
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                            </section>
-                        )}
-
-                        {/* Approved Tab */}
-                        {activeTab === "approved" && (
-                            <section className="animate-in fade-in slide-in-from-top-2 duration-300">
-                                <div className="text-sm text-white/40 mb-4">
-                                    Directory of all accepted members.
-                                </div>
-
-                                <div className="grid gap-4">
-                                    <div className="hidden md:grid grid-cols-12 gap-4 text-xs font-mono uppercase tracking-widest text-white/40 border-b border-white/10 pb-4 px-4">
-                                        <div className="col-span-3">Name</div>
-                                        <div className="col-span-4">Contact</div>
-                                        <div className="col-span-3">Date Approved</div>
-                                        <div className="col-span-2 text-right">Status</div>
-                                    </div>
-
-                                    <div className="space-y-4">
-                                        {approvedApps.map((app) => (
-                                            <div
-                                                key={app.id}
-                                                className="flex flex-col md:grid md:grid-cols-12 gap-4 bg-white/5 border border-white/5 p-4 rounded-lg"
-                                            >
-                                                <div className="col-span-3 font-medium">
-                                                    <span className="md:hidden text-xs text-white/40 font-mono uppercase mr-2">Name:</span>
-                                                    {app.name}
-                                                </div>
-                                                <div className="col-span-4 text-sm text-white/70">
-                                                    <span className="md:hidden text-xs text-white/40 font-mono uppercase mr-2 block">Contact:</span>
-                                                    <div className="mb-1">{app.email}</div>
-                                                    <a href={app.portfolioUrl.startsWith('http') ? app.portfolioUrl : `https://${app.portfolioUrl}`} target="_blank" rel="noopener noreferrer" className="text-xs text-primary hover:underline font-mono truncate block">
-                                                        {app.portfolioUrl}
-                                                    </a>
-                                                </div>
-                                                <div className="col-span-3 text-xs text-white/40 font-mono">
-                                                    <span className="md:hidden text-xs text-white/40 font-mono uppercase mr-2">Applied:</span>
-                                                    {format(new Date(app.createdAt!), "MMM d, yyyy")}
-                                                </div>
-                                                <div className="col-span-2 text-right">
-                                                    <span className="inline-flex items-center gap-1 text-xs text-green-500 font-mono uppercase tracking-widest bg-green-500/10 px-2 py-1 rounded">
-                                                        <Check className="w-3 h-3" />
-                                                        Approved
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        ))}
-                                        {approvedApps.length === 0 && (
-                                            <div className="text-center py-8 text-white/40 text-sm">
-                                                No approved members yet.
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                            </section>
-                        )}
+                                            )}
+                                        </CardContent>
+                                    </Card>
+                                ))
+                            )}
+                        </div>
                     </div>
                 )}
             </div>
 
             {/* Application Detail Dialog */}
             <Dialog open={!!viewApp} onOpenChange={(open) => !open && setViewApp(null)}>
-                <DialogContent className="bg-[#0F0F11] border-white/10 text-white sm:max-w-xl">
+                <DialogContent className="bg-[#0F0F11] border-white/10 text-white sm:max-w-xl max-h-[90vh] overflow-y-auto">
                     <DialogHeader>
-                        <DialogTitle className="text-xl font-display">{viewApp?.name}</DialogTitle>
+                        <DialogTitle className="text-xl font-display flex items-center gap-2">
+                            <User className="h-5 w-5 text-white/40" />
+                            {viewApp?.name}
+                        </DialogTitle>
                         <DialogDescription className="text-white/40">
                             Applied on {viewApp?.createdAt ? format(new Date(viewApp.createdAt), "PPP p") : ""}
                         </DialogDescription>
                     </DialogHeader>
 
                     <div className="space-y-6 py-4">
-                        <div className="space-y-2">
-                            <h4 className="text-xs font-mono uppercase tracking-widest text-white/40">Contact</h4>
-                            <div className="text-sm break-all">{viewApp?.email}</div>
-                        </div>
-
-                        <div className="space-y-2">
-                            <h4 className="text-xs font-mono uppercase tracking-widest text-white/40">Portfolio</h4>
-                            <a
-                                href={viewApp?.portfolioUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-sm text-primary hover:underline break-all"
-                            >
-                                {viewApp?.portfolioUrl}
-                            </a>
+                        <div className="grid gap-4 p-4 bg-white/5 rounded-lg border border-white/5">
+                            <div className="space-y-1">
+                                <label className="text-xs font-mono uppercase tracking-widest text-white/40">Contact Email</label>
+                                <div className="text-sm select-all break-all flex items-center gap-2">
+                                    <Mail className="h-3 w-3" />
+                                    {viewApp?.email}
+                                </div>
+                            </div>
+                            <div className="space-y-1">
+                                <label className="text-xs font-mono uppercase tracking-widest text-white/40">Portfolio</label>
+                                <a
+                                    href={viewApp?.portfolioUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-sm text-primary hover:underline break-all flex items-center gap-2"
+                                >
+                                    <Globe className="h-3 w-3" />
+                                    {viewApp?.portfolioUrl}
+                                </a>
+                            </div>
                         </div>
 
                         <div className="space-y-2">
                             <h4 className="text-xs font-mono uppercase tracking-widest text-white/40">Reason for Joining</h4>
-                            <div className="text-sm leading-relaxed text-white/80 whitespace-pre-wrap max-h-[300px] overflow-y-auto pr-2 custom-scrollbar break-all">
+                            <div className="text-sm leading-relaxed text-white/80 whitespace-pre-wrap p-4 bg-white/5 rounded-lg border border-white/5 min-h-[100px]">
                                 {viewApp?.reason}
                             </div>
                         </div>
@@ -450,6 +486,13 @@ export default function Admin() {
                                     </Button>
                                 </>
                             )}
+                            <Button
+                                variant="outline"
+                                onClick={() => setViewApp(null)}
+                                className="border-white/10 hover:bg-white/5 text-white"
+                            >
+                                Close
+                            </Button>
                         </div>
                     </div>
                 </DialogContent>
