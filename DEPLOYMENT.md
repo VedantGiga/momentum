@@ -35,7 +35,9 @@ This guide outlines the steps to deploy your Express + Vite application to Verce
 
 4.  **Environment Variables**:
     - Go to your Vercel Project Dashboard > Settings > Environment Variables.
-    - Add `DATABASE_URL`: `postgres://user:password@host/database...`
+    - Add `DATABASE_URL`: Your PostgreSQL connection string.
+      - **Note**: If your provider gives you a "Prisma URL" (e.g. Supabase Transaction Mode, port 6543), you can use that. It is just a standard PostgreSQL connection string optimized for serverless.
+      - Ensure it looks like `postgres://user:pass@host:port/db`.
     - Add `NODE_ENV`: `production`
     - Redeploy if necessary.
 
