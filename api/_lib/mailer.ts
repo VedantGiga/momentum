@@ -11,9 +11,9 @@ const transporter = nodemailer.createTransport({
 
 export async function sendInviteEmail(email: string, name: string, inviteToken: string) {
   // Determine base URL
-  const baseUrl = process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}`
-    : `http://localhost:${process.env.PORT || 5000}`;
+  // Determine base URL, prioritizing explicit configuration
+  const baseUrl = process.env.BASE_URL ||
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : `http://localhost:${process.env.PORT || 5000}`);
 
   const joinLink = `${baseUrl}/api/join?token=${inviteToken}`;
 
