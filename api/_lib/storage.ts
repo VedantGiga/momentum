@@ -8,7 +8,7 @@ import {
   type InsertProject,
   type Application,
   type InsertApplication,
-} from "../shared/schema";
+} from "../../shared/schema";
 
 export interface IStorage {
   getProjects(): Promise<Project[]>;

@@ -1,12 +1,12 @@
 import * as esbuild from "esbuild";
 
 if (process.env.VERCEL) {
-  console.log("Skipping server build on Vercel");
-  process.exit(0);
+    console.log("Skipping server build on Vercel");
+    process.exit(0);
 }
 
 await esbuild.build({
-    entryPoints: ["server/index.ts"],
+    entryPoints: ["api/_lib/index.ts"],
     bundle: true,
     platform: "node",
     target: "node20",
