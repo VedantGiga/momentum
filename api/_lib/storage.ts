@@ -1,4 +1,4 @@
-import { db } from "./db";
+import { db } from "./db.js";
 import { eq, desc } from "drizzle-orm";
 import { randomUUID } from "node:crypto";
 import {
@@ -8,7 +8,7 @@ import {
   type InsertProject,
   type Application,
   type InsertApplication,
-} from "../../shared/schema";
+} from "../../shared/schema.js";
 
 export interface IStorage {
   getProjects(): Promise<Project[]>;
