@@ -156,7 +156,12 @@ export async function registerRoutes(
   });
 
   // Seed initial data if empty
-  await seedDatabase();
+  try {
+    await seedDatabase();
+  } catch (error) {
+    console.error("Failed to seed database:", error);
+    // Don't crash the server, just log the error
+  }
 
   return httpServer;
 }
