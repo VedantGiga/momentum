@@ -1,5 +1,4 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { app, setupApp } from '../server/app';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
     // Set CORS headers early to allow seeing errors in browser
@@ -17,18 +16,20 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     try {
-        console.log("[API] Handler started. Calling setupApp...");
+        console.log("[API] Handler started. Dynamically importing server/app...");
 
-        // Ensure the app is initialized
+        // Dynamic import to catch initialization errors
+        const { app, setupApp } = await import('../server/app');
+
+        console.log("[API] Server module imported. Calling setupApp...");
         await setupApp();
-        console.log("[API] setupApp completed. Passing to Express...");
 
-        // Pass request to Express app
+        console.log("[API] setupApp completed. Passing to Express...");
         return app(req, res);
     } catch (err: any) {
-        console.error("Server Initialization/Request Failed:", err);
+        console.error("Server Initialization/Import Failed:", err);
         res.status(500).json({
-            message: "Server encountered a critical error during startup or processing",
+            message: "Server encountered a critical error during loading",
             error: err.message,
             stack: process.env.NODE_ENV === 'development' ? err.stack : undefined
         });
