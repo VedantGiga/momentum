@@ -9,7 +9,7 @@ if (!process.env.DATABASE_URL) {
 }
 
 export const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
+  connectionString: process.env.DATABASE_URL || "postgres://user:pass@localhost:5432/db",
   ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : undefined,
 });
 export const db = drizzle(pool, { schema });
